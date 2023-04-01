@@ -1,5 +1,5 @@
 import { test, describe, expect } from "vitest";
-import { getNumberSequence } from "./utils";
+import { getNumberSequence, getRandomNumbers, shuffleArray } from "./utils";
 
 describe("getNumberSequence", () => {
   test("generates sequence of numbers", () => {
@@ -14,5 +14,31 @@ describe("getNumberSequence", () => {
   });
   test("min defaults to 0", () => {
     expect(getNumberSequence({ max: 2 })).toEqual([0, 1, 2]);
+  });
+});
+
+describe("shuffleArray", () => {
+  test("shuffles array", () => {
+    const testArray = [1, 2, 3, 4, 5];
+    expect(shuffleArray(testArray)).not.toEqual(testArray);
+    expect(shuffleArray(testArray).sort()).toEqual([...testArray].sort());
+  });
+});
+
+describe("getRandomNumbers", () => {
+  test("returns of numbers in the range", () => {
+    const min = 0;
+    const max = 4;
+    getRandomNumbers({ min, max, length: 5 }).forEach((num) => {
+      expect(num).toBeGreaterThanOrEqual(0);
+      expect(num).toBeLessThanOrEqual(4);
+    });
+  });
+  test("returns unique numbers", () => {
+    const min = 0;
+    const max = 4;
+    const length = 5;
+    const randomNumbers = getRandomNumbers({ min, max, length });
+    expect(new Set(randomNumbers).size).toEqual(length);
   });
 });
