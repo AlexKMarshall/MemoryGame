@@ -1,6 +1,6 @@
 import { useState } from "react";
-import "./App.css";
 import { getRandomNumbers, shuffleArray } from "./utils";
+import * as styles from "./App.css";
 
 // state needed
 // array of items on the board
@@ -48,7 +48,7 @@ function App() {
   };
 
   return (
-    <div>
+    <div className={styles.app}>
       <h1>Memory</h1>
       <div>
         {gameState.map((card, index) => (
