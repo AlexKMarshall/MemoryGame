@@ -8,6 +8,10 @@ globalStyle("*", {
   margin: 0,
 });
 
+globalStyle("html, body, #root", {
+  height: "100%",
+});
+
 globalStyle("body", {
   lineHeight: 1.5,
   WebkitFontSmoothing: "antialiased",

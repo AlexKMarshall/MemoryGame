@@ -2,6 +2,14 @@ import { style, styleVariants } from "@vanilla-extract/css";
 
 export const main = style({
   padding: "1.5rem",
+  minHeight: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+});
+
+export const heading = style({
+  fontSize: "1.5rem",
 });
 
 export const cardGrid = style({

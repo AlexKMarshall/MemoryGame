@@ -49,7 +49,7 @@ function App() {
 
   return (
     <main className={styles.main}>
-      <h1>Memory</h1>
+      <h1 className={styles.heading}>memory</h1>
       <ul className={styles.cardGrid}>
         {gameState.map((card, index) => (
           <li key={index}>
@@ -66,6 +66,7 @@ function App() {
           </li>
         ))}
       </ul>
+      <p>Time</p>
     </main>
   );
 }
