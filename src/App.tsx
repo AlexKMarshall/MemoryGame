@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getRandomNumbers, shuffleArray } from "./utils";
+import * as styles from "./App.css";
 
 // state needed
 // array of items on the board
@@ -47,22 +48,25 @@ function App() {
   };
 
   return (
-    <div>
+    <main className={styles.main}>
       <h1>Memory</h1>
-      <div>
+      <ul className={styles.cardGrid}>
         {gameState.map((card, index) => (
-          <button onClick={() => handleCardSelect(index)}>
-            {card.state === "matched" ? (
-              <span>{card.value}!</span>
-            ) : card.state === "faceUp" ? (
-              card.value
-            ) : (
-              "?"
-            )}
-          </button>
+          <li key={index}>
+            <button
+              onClick={() => handleCardSelect(index)}
+              className={styles.cardButton[card.state]}
+            >
+              {card.state === "matched" ? (
+                <span>{card.value}!</span>
+              ) : card.state === "faceUp" ? (
+                card.value
+              ) : null}
+            </button>
+          </li>
         ))}
-      </div>
-    </div>
+      </ul>
+    </main>
   );
 }
 

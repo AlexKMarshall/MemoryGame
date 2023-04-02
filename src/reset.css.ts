@@ -13,6 +13,11 @@ globalStyle("body", {
   WebkitFontSmoothing: "antialiased",
 });
 
+globalStyle("ol, ul", {
+  listStyle: "none",
+  padding: 0,
+});
+
 globalStyle("img, picture, video, canvas, svg", {
   display: "block",
   maxWidth: "100%",
