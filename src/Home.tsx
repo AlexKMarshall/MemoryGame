@@ -3,6 +3,7 @@ import { getRandomNumbers, shuffleArray } from "./utils";
 import * as styles from "./Home.css";
 import { useInterval } from "./useInterval";
 import * as Dialog from "@radix-ui/react-dialog";
+import { Link } from "react-router-dom";
 
 type GameState = {
   state: "idle" | "inProgress" | "complete";
@@ -185,7 +186,7 @@ function useGame() {
   return [gameState, dispatch] as const;
 }
 
-function App() {
+export function Home() {
   const [gameState, dispatch] = useGame();
 
   const handleCardSelect = (index: number) => {
@@ -231,7 +232,7 @@ function App() {
         </div>
       </div>
 
-      <Dialog.Root open={gameState.state === "complete"}>
+      <Dialog.Root open={true}>
         <Dialog.Portal>
           <Dialog.Overlay className={styles.dialogOverlay} />
           <div className={styles.dialogPositioner}>
@@ -263,6 +264,9 @@ function App() {
                 >
                   Restart
                 </button>
+                <Link to="/settings" className={styles.buttonSecondary}>
+                  Setup New Game
+                </Link>
               </div>
             </Dialog.Content>
           </div>
@@ -271,5 +275,3 @@ function App() {
     </main>
   );
 }
-
-export default App;
