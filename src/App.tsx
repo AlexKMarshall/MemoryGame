@@ -222,8 +222,16 @@ function App() {
           ))}
         </ul>
       )}
-      <p>Time: {formattedDuration}</p>
-      <p>Moves: {gameState.moves}</p>
+      <div className={styles.metadataSection}>
+        <div className={styles.greyBox}>
+          <h2 className={styles.metadataHeading}>Time</h2>{" "}
+          <p className={styles.metadataValue}> {formattedDuration}</p>
+        </div>
+        <div className={styles.greyBox}>
+          <h2 className={styles.metadataHeading}>Moves</h2>{" "}
+          <p className={styles.metadataValue}>{gameState.moves}</p>
+        </div>
+      </div>
     </main>
   );
 }
