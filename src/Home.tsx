@@ -232,7 +232,7 @@ export function Home() {
         </div>
       </div>
 
-      <Dialog.Root open={true}>
+      <Dialog.Root open={gameState.state === "complete"}>
         <Dialog.Portal>
           <Dialog.Overlay className={styles.dialogOverlay} />
           <div className={styles.dialogPositioner}>
