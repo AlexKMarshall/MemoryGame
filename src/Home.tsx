@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useState } from "react";
 import { getRandomNumbers, shuffleArray } from "./utils";
-import * as styles from "./App.css";
+import * as styles from "./Home.css";
 import { useInterval } from "./useInterval";
 import * as Dialog from "@radix-ui/react-dialog";
 
