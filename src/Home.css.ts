@@ -17,18 +17,37 @@ export const cardGrid = style({
   display: "grid",
   gridTemplateColumns: "repeat(4, 1fr)",
   gap: "0.75rem",
+  fontSize: "2.5rem",
+  selectors: {
+    '&[data-size="4"]': {
+      gridTemplateColumns: "repeat(4, 1fr)",
+      gap: "0.75rem",
+    },
+    '&[data-size="6"]': {
+      gridTemplateColumns: "repeat(6, 1fr)",
+      gap: "0.5rem",
+    },
+  },
 });
 
 const cardButtonBase = style({
   display: "grid",
   placeContent: "center",
-  minWidth: "4.5rem",
   aspectRatio: "1 / 1",
   borderRadius: "50%",
   border: "none",
-  fontSize: "2.5rem",
   outlineOffset: "0.25rem",
   outlineColor: "hsl(205deg 30% 27%)",
+  selectors: {
+    '[data-size="4"] &': {
+      fontSize: "2.5rem",
+      minWidth: "4.5rem",
+    },
+    '[data-size="6"] &': {
+      fontSize: "1.5rem",
+      minWidth: "3rem",
+    },
+  },
 });
 
 export const cardButton = styleVariants({

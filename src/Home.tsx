@@ -1,9 +1,10 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { getRandomNumbers, shuffleArray } from "./utils";
 import * as styles from "./Home.css";
 import { useInterval } from "./useInterval";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { z } from "zod";
 
 type GameState = {
   state: "idle" | "inProgress" | "complete";
@@ -44,85 +45,94 @@ type GameActions =
   | IncrementTimeAction
   | RestartGameAction;
 
-function gameReducer(state: GameState, action: GameActions): GameState {
-  switch (action.type) {
-    case "flipUp": {
-      // don't flip up if the the number of allowed face up cards is reached
-      if (getFaceUpCardCount(state.cards) === numberInMatch) {
-        return state;
-      }
-      const card = state.cards[action.cardIndex];
-      if (card.state === "faceUp") return state;
-      if (card.state === "matched") return state;
-      // flip card
-      const newState = {
-        ...state,
-        state: "inProgress",
-        cards: [...state.cards],
-      } satisfies GameState;
-      newState.cards[action.cardIndex] = {
-        ...card,
-        state: "faceUp",
-      };
-      if (getFaceUpCardCount(newState.cards) === numberInMatch) {
-        newState.moves++;
-      }
-      return newState;
-    }
-    case "checkMatch": {
-      if (getFaceUpCardCount(state.cards) !== numberInMatch) {
-        return state;
-      }
-      const faceUpCards = state.cards.filter((card) => card.state === "faceUp");
-      const values = faceUpCards.map((card) => card.value);
-      const isMatch = values.every((value) => value === values[0]);
-      if (!isMatch) return state;
-      const newState = { ...state };
-
-      newState.cards = newState.cards.map((card) => ({
-        ...card,
-        state: card.state === "faceUp" ? "matched" : card.state,
-      }));
-
-      if (getIsGameComplete(newState.cards)) {
-        newState.state = "complete";
-      }
-
-      return newState;
-    }
-    case "flipNonMatchesDown": {
-      if (getFaceUpCardCount(state.cards) !== numberInMatch) {
-        return state;
-      }
-      const faceUpCards = state.cards.filter((card) => card.state === "faceUp");
-      const values = faceUpCards.map((card) => card.value);
-      const isMatch = values.every((value) => value === values[0]);
-      if (!isMatch) {
-        return {
+function getGameReducer(settings: Settings) {
+  return function gameReducer(
+    state: GameState,
+    action: GameActions
+  ): GameState {
+    switch (action.type) {
+      case "flipUp": {
+        // don't flip up if the the number of allowed face up cards is reached
+        if (getFaceUpCardCount(state.cards) === numberInMatch) {
+          return state;
+        }
+        const card = state.cards[action.cardIndex];
+        if (card.state === "faceUp") return state;
+        if (card.state === "matched") return state;
+        // flip card
+        const newState = {
           ...state,
-          cards: state.cards.map((card) => {
-            if (card.state === "faceUp") {
-              return {
-                ...card,
-                state: "faceDown",
-              };
-            }
-            return card;
-          }),
+          state: "inProgress",
+          cards: [...state.cards],
+        } satisfies GameState;
+        newState.cards[action.cardIndex] = {
+          ...card,
+          state: "faceUp",
         };
+        if (getFaceUpCardCount(newState.cards) === numberInMatch) {
+          newState.moves++;
+        }
+        return newState;
       }
-    }
+      case "checkMatch": {
+        if (getFaceUpCardCount(state.cards) !== numberInMatch) {
+          return state;
+        }
+        const faceUpCards = state.cards.filter(
+          (card) => card.state === "faceUp"
+        );
+        const values = faceUpCards.map((card) => card.value);
+        const isMatch = values.every((value) => value === values[0]);
+        if (!isMatch) return state;
+        const newState = { ...state };
 
-    case "incrementTime": {
-      if (state.state !== "inProgress") return state;
-      return { ...state, timer: state.timer + 1000 };
+        newState.cards = newState.cards.map((card) => ({
+          ...card,
+          state: card.state === "faceUp" ? "matched" : card.state,
+        }));
+
+        if (getIsGameComplete(newState.cards)) {
+          newState.state = "complete";
+        }
+
+        return newState;
+      }
+      case "flipNonMatchesDown": {
+        if (getFaceUpCardCount(state.cards) !== numberInMatch) {
+          return state;
+        }
+        const faceUpCards = state.cards.filter(
+          (card) => card.state === "faceUp"
+        );
+        const values = faceUpCards.map((card) => card.value);
+        const isMatch = values.every((value) => value === values[0]);
+        if (!isMatch) {
+          return {
+            ...state,
+            cards: state.cards.map((card) => {
+              if (card.state === "faceUp") {
+                return {
+                  ...card,
+                  state: "faceDown",
+                };
+              }
+              return card;
+            }),
+          };
+        }
+      }
+
+      case "incrementTime": {
+        if (state.state !== "inProgress") return state;
+        return { ...state, timer: state.timer + 1000 };
+      }
+      case "restartGame": {
+        return getInitialGameState(settings);
+      }
+      default:
+        return state;
     }
-    case "restartGame": {
-      return getInitialGameState();
-    }
-    default:
-      return state;
-  }
+  };
 }
 
 function getGameNumbers(size: 4 | 6 = 4) {
@@ -130,23 +140,10 @@ function getGameNumbers(size: 4 | 6 = 4) {
   const uniqueNumbers = getRandomNumbers({
     length: uniqueNumberCount,
     min: 1,
-    max: 9,
+    max: 99,
   });
   const numbers = [...uniqueNumbers, ...uniqueNumbers];
   return shuffleArray(numbers);
-}
-
-function getInitialGameState(size: 4 | 6 = 4) {
-  const numbers = getGameNumbers(size);
-  return {
-    cards: numbers.map((number) => ({
-      value: number,
-      state: "faceDown",
-    })),
-    moves: 0,
-    state: "idle",
-    timer: 0,
-  } satisfies GameState;
 }
 
 /**
@@ -162,8 +159,35 @@ function getIsGameComplete(cards: CardState[]) {
   return cards.every((card) => card.state === "matched");
 }
 
-function useGame() {
-  const [gameState, dispatch] = useReducer(gameReducer, getInitialGameState());
+const settingsSchema = z.object({
+  size: z.preprocess(Number, z.union([z.literal(4), z.literal(6)])),
+});
+
+type Settings = z.infer<typeof settingsSchema>;
+
+const defaultSettings = {
+  size: 4,
+} satisfies Settings;
+
+function getInitialGameState(settings: Settings) {
+  const numbers = getGameNumbers(settings.size);
+  return {
+    cards: numbers.map((number) => ({
+      value: number,
+      state: "faceDown",
+    })),
+    moves: 0,
+    state: "idle",
+    timer: 0,
+  } satisfies GameState;
+}
+
+function useGame(settings: Settings) {
+  const [gameState, dispatch] = useReducer(
+    getGameReducer(settings),
+    getInitialGameState(settings)
+  );
+
   const faceUpCardCount = getFaceUpCardCount(gameState.cards);
 
   useEffect(() => {
@@ -187,7 +211,15 @@ function useGame() {
 }
 
 export function Home() {
-  const [gameState, dispatch] = useGame();
+  const [searchParams] = useSearchParams();
+
+  const parsedQuery = settingsSchema.safeParse(
+    Object.fromEntries(searchParams.entries())
+  );
+
+  const settings = parsedQuery.success ? parsedQuery.data : defaultSettings;
+
+  const [gameState, dispatch] = useGame(settings);
 
   const handleCardSelect = (index: number) => {
     dispatch({ type: "checkMatch" });
@@ -208,7 +240,7 @@ export function Home() {
     <main className={styles.main}>
       <h1 className={styles.heading}>memory</h1>
 
-      <ul className={styles.cardGrid}>
+      <ul className={styles.cardGrid} data-size={settings.size}>
         {gameState.cards.map((card, index) => (
           <li key={index}>
             <button
