@@ -157,30 +157,47 @@ function getIsGameComplete(cards: CardState[]) {
   return cards.every((card) => card.state === "matched");
 }
 
-function App() {
+function useGame() {
   const [gameState, dispatch] = useReducer(gameReducer, getInitialGameState());
+  const faceUpCardCount = getFaceUpCardCount(gameState.cards);
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       dispatch({ type: "checkMatch" });
     }, 1000);
     return () => clearTimeout(timeoutId);
-  }, [gameState.cards]);
+  }, [faceUpCardCount]);
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       dispatch({ type: "flipNonMatchesDown" });
     }, 1000);
     return () => clearTimeout(timeoutId);
-  }, [gameState.cards]);
+  }, [faceUpCardCount]);
   useInterval(
     () => dispatch({ type: "incrementTime" }),
     gameState.state === "inProgress" ? 1000 : null
   );
+
+  return [gameState, dispatch] as const;
+}
+
+function App() {
+  const [gameState, dispatch] = useGame();
 
   const handleCardSelect = (index: number) => {
     dispatch({ type: "checkMatch" });
     dispatch({ type: "flipNonMatchesDown" });
     dispatch({ type: "flipUp", cardIndex: index });
   };
+
+  const durationDate = new Date(gameState.timer);
+  const duractionSeconds = String(durationDate.getUTCSeconds()).padStart(
+    2,
+    "0"
+  );
+  const durationMinutes = durationDate.getUTCMinutes();
+
+  const formattedDuration = `${durationMinutes}:${duractionSeconds}`;
 
   return (
     <main className={styles.main}>
@@ -205,7 +222,7 @@ function App() {
           ))}
         </ul>
       )}
-      <p>Time: {gameState.timer / 1000}</p>
+      <p>Time: {formattedDuration}</p>
       <p>Moves: {gameState.moves}</p>
     </main>
   );
