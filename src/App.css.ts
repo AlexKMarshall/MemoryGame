@@ -26,6 +26,8 @@ const cardButtonBase = style({
   borderRadius: "50%",
   border: "none",
   fontSize: "2.5rem",
+  outlineOffset: "0.25rem",
+  outlineColor: "hsl(205deg 30% 27%)",
 });
 
 export const cardButton = styleVariants({
@@ -38,14 +40,14 @@ export const cardButton = styleVariants({
   faceUp: [
     cardButtonBase,
     {
-      backgroundColor: "hsl(203deg 28% 79%)",
+      backgroundColor: "hsl(37deg 98% 54%)",
       color: "white",
     },
   ],
   matched: [
     cardButtonBase,
     {
-      backgroundColor: "hsl(37deg 98% 54%)",
+      backgroundColor: "hsl(203deg 28% 79%)",
       color: "white",
     },
   ],
