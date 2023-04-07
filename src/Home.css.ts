@@ -105,6 +105,13 @@ export const stack8 = style([
   },
 ]);
 
+export const stack12 = style([
+  stackBase,
+  {
+    gap: "0.75rem",
+  },
+]);
+
 export const stack16 = style([
   stackBase,
   {
@@ -116,6 +123,13 @@ export const stack24 = style([
   stackBase,
   {
     gap: "1.5rem",
+  },
+]);
+
+export const stack32 = style([
+  stackBase,
+  {
+    gap: "2rem",
   },
 ]);
 
@@ -164,7 +178,7 @@ export const gameScoreDd = style({
   color: "hsl(205deg 30% 27%)",
 });
 
-const buttonBase = style({
+export const buttonBase = style({
   paddingBlock: "0.75rem",
   paddingInline: "1.75rem",
   border: "none",

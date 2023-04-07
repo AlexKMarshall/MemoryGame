@@ -43,3 +43,13 @@ globalStyle("a", {
   color: "inherit",
   textDecoration: "none",
 });
+
+globalStyle("fieldset", {
+  margin: 0,
+  padding: 0,
+  border: "none",
+});
+
+globalStyle("legend", {
+  padding: 0,
+});
