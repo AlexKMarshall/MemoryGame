@@ -7,6 +7,11 @@ export const main = style({
   flexDirection: "column",
   justifyContent: "space-between",
   backgroundColor: "hsl(0deg 0% 99%)",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      padding: "2.5rem",
+    },
+  },
 });
 
 export const header = style({
@@ -17,21 +22,37 @@ export const header = style({
 
 export const heading = style({
   fontSize: "1.5rem",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      fontSize: "2.5rem",
+    },
+  },
 });
 
 export const cardGrid = style({
+  alignSelf: "center",
   display: "grid",
   gridTemplateColumns: "repeat(4, 1fr)",
   gap: "0.75rem",
-  fontSize: "2.5rem",
+  justifyItems: "center",
   selectors: {
     '&[data-size="4"]': {
       gridTemplateColumns: "repeat(4, 1fr)",
       gap: "0.75rem",
+      "@media": {
+        "screen and (min-width: 768px)": {
+          gap: "1.25rem",
+        },
+      },
     },
     '&[data-size="6"]': {
       gridTemplateColumns: "repeat(6, 1fr)",
       gap: "0.5rem",
+      "@media": {
+        "screen and (min-width: 768px)": {
+          gap: "1rem",
+        },
+      },
     },
   },
 });
@@ -48,10 +69,22 @@ const cardButtonBase = style({
     '[data-size="4"] &': {
       fontSize: "2.5rem",
       minWidth: "4.5rem",
+      "@media": {
+        "screen and (min-width: 768px)": {
+          fontSize: "3.5rem",
+          minWidth: "7rem",
+        },
+      },
     },
     '[data-size="6"] &': {
       fontSize: "1.5rem",
       minWidth: "3rem",
+      "@media": {
+        "screen and (min-width: 768px)": {
+          fontSize: "2.75rem",
+          minWidth: "5rem",
+        },
+      },
     },
   },
 });
@@ -80,9 +113,16 @@ export const cardButton = styleVariants({
 });
 
 export const metadataSection = style({
-  display: "grid",
-  gridTemplateColumns: "repeat(2, 1fr)",
+  // display: "grid",
+  // gridTemplateColumns: "repeat(2, 1fr)",
+  display: "flex",
+  justifyContent: "center",
   gap: "1.5rem",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      gap: "2rem",
+    },
+  },
 });
 
 export const greyBox = style({
@@ -92,6 +132,7 @@ export const greyBox = style({
   display: "flex",
   flexDirection: "column",
   textAlign: "center",
+  flexBasis: "16rem",
 });
 
 export const metadataHeading = style({
