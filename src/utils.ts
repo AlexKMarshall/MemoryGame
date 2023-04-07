@@ -15,27 +15,16 @@ export function getNumberSequence({
 }
 
 /**
- *  Shuffles an array
+ *  Shuffles an array. Uses the Fisher-Yates shuffle algorithm.
  * @param array  Array to shuffle
  * @returns  Shuffled array
  */
 export function shuffleArray<T>(array: T[]) {
   const newArray = [...array];
 
-  for (
-    let unshuffledStart = 0;
-    unshuffledStart < newArray.length;
-    unshuffledStart++
-  ) {
-    // Pick a random index from the unshuffled part of the array
-    const randomPick = Math.floor(
-      Math.random() * (newArray.length - unshuffledStart)
-    );
-    // Swap the random element with the first unshuffled element
-    [newArray[unshuffledStart], newArray[randomPick]] = [
-      newArray[randomPick],
-      newArray[unshuffledStart],
-    ];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
   }
 
   return newArray;
