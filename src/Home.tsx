@@ -238,7 +238,33 @@ export function Home() {
 
   return (
     <main className={styles.main}>
-      <h1 className={styles.heading}>memory</h1>
+      <div className={styles.header}>
+        <h1 className={styles.heading}>memory</h1>
+        <Dialog.Root>
+          <Dialog.Trigger className={styles.buttonPrimary}>Menu</Dialog.Trigger>
+          <Dialog.Portal>
+            <Dialog.Overlay className={styles.dialogOverlay} />
+            <div className={styles.dialogPositioner}>
+              <Dialog.Content className={styles.menuDialogContent}>
+                <div className={styles.stack16}>
+                  <Dialog.Close
+                    className={styles.buttonPrimary}
+                    onClick={() => dispatch({ type: "restartGame" })}
+                  >
+                    Restart
+                  </Dialog.Close>
+                  <Link to="/settings" className={styles.buttonSecondary}>
+                    New Game
+                  </Link>
+                  <Dialog.Close className={styles.buttonSecondary}>
+                    Resume Game
+                  </Dialog.Close>
+                </div>
+              </Dialog.Content>
+            </div>
+          </Dialog.Portal>
+        </Dialog.Root>
+      </div>
 
       <ul className={styles.cardGrid} data-size={settings.size}>
         {gameState.cards.map((card, index) => (
@@ -268,7 +294,7 @@ export function Home() {
         <Dialog.Portal>
           <Dialog.Overlay className={styles.dialogOverlay} />
           <div className={styles.dialogPositioner}>
-            <Dialog.Content className={styles.dialogContent}>
+            <Dialog.Content className={styles.gameOverDialogContent}>
               <div className={styles.dialogHeader}>
                 <Dialog.Title className={styles.dialogHeading}>
                   You did it!

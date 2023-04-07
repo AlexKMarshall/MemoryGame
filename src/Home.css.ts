@@ -9,6 +9,12 @@ export const main = style({
   backgroundColor: "hsl(0deg 0% 99%)",
 });
 
+export const header = style({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+});
+
 export const heading = style({
   fontSize: "1.5rem",
 });
@@ -152,14 +158,15 @@ export const stack32 = style([
   },
 ]);
 
-export const dialogContent = style([
-  {
-    padding: "1.5rem",
-    backgroundColor: "hsl(0deg 0% 99%)",
-    borderRadius: 10,
-  },
-  stack24,
-]);
+export const dialogContent = style({
+  padding: "1.5rem",
+  backgroundColor: "hsl(0deg 0% 99%)",
+  borderRadius: 10,
+});
+
+export const gameOverDialogContent = style([dialogContent, stack24]);
+
+export const menuDialogContent = style([dialogContent, stack16]);
 
 export const dialogHeader = style([
   stack8,
@@ -199,7 +206,7 @@ export const gameScoreDd = style({
 
 export const buttonBase = style({
   paddingBlock: "0.75rem",
-  paddingInline: "1.75rem",
+  paddingInline: "1.25rem",
   border: "none",
   borderRadius: 999,
   display: "flex",
