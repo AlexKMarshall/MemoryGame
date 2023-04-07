@@ -10,29 +10,23 @@ export function Settings() {
         <div
           className={styles.fieldset}
           role="radiogroup"
-          aria-labelledby="theme"
+          aria-labelledby="size"
         >
-          <p id="theme" className={styles.legend}>
-            Select Theme
+          <p id="size" className={styles.legend}>
+            Grid Size
           </p>
           <div className={styles.radioGroup}>
             <VisuallyHidden.Root asChild>
-              <input
-                type="radio"
-                id="numbers"
-                name="theme"
-                value="numbers"
-                defaultChecked
-              />
+              <input type="radio" id="4" name="size" value="4" defaultChecked />
             </VisuallyHidden.Root>
-            <label htmlFor="numbers" className={styles.radio}>
-              Numbers
+            <label htmlFor="4" className={styles.radio}>
+              4x4
             </label>
             <VisuallyHidden.Root asChild>
-              <input type="radio" id="icons" name="theme" value="icons" />
+              <input type="radio" id="6" name="size" value="6" />
             </VisuallyHidden.Root>
-            <label htmlFor="icons" className={styles.radio}>
-              Icons
+            <label htmlFor="6" className={styles.radio}>
+              6x6
             </label>
           </div>
         </div>
