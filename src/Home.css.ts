@@ -113,8 +113,6 @@ export const cardButton = styleVariants({
 });
 
 export const metadataSection = style({
-  // display: "grid",
-  // gridTemplateColumns: "repeat(2, 1fr)",
   display: "flex",
   justifyContent: "center",
   gap: "1.5rem",
@@ -133,16 +131,35 @@ export const greyBox = style({
   flexDirection: "column",
   textAlign: "center",
   flexBasis: "16rem",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingInline: "1.25rem",
+      paddingBlock: "1.5rem",
+    },
+  },
 });
 
 export const metadataHeading = style({
   fontSize: "1rem",
   color: "hsl(203deg 23% 54%)",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      fontSize: "1.125rem",
+    },
+  },
 });
 
 export const metadataValue = style({
   fontSize: "1.5rem",
   color: "hsl(205deg 30% 27%)",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      fontSize: "2rem",
+    },
+  },
 });
 
 export const dialogOverlay = style({
