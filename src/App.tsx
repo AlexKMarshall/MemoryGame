@@ -202,26 +202,22 @@ function App() {
   return (
     <main className={styles.main}>
       <h1 className={styles.heading}>memory</h1>
-      {getIsGameComplete(gameState.cards) ? (
-        <div>Game complete</div>
-      ) : (
-        <ul className={styles.cardGrid}>
-          {gameState.cards.map((card, index) => (
-            <li key={index}>
-              <button
-                onClick={() => handleCardSelect(index)}
-                className={styles.cardButton[card.state]}
-              >
-                {card.state === "matched" ? (
-                  <span>{card.value}!</span>
-                ) : card.state === "faceUp" ? (
-                  card.value
-                ) : null}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+
+      {getIsGameComplete(gameState.cards) && <div>Game complete</div>}
+
+      <ul className={styles.cardGrid}>
+        {gameState.cards.map((card, index) => (
+          <li key={index}>
+            <button
+              onClick={() => handleCardSelect(index)}
+              className={styles.cardButton[card.state]}
+            >
+              {card.state === "faceDown" ? null : card.value}
+            </button>
+          </li>
+        ))}
+      </ul>
+
       <div className={styles.metadataSection}>
         <div className={styles.greyBox}>
           <h2 className={styles.metadataHeading}>Time</h2>{" "}
