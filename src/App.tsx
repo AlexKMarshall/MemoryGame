@@ -2,6 +2,7 @@ import { useEffect, useReducer, useState } from "react";
 import { getRandomNumbers, shuffleArray } from "./utils";
 import * as styles from "./App.css";
 import { useInterval } from "./useInterval";
+import * as Dialog from "@radix-ui/react-dialog";
 
 type GameState = {
   state: "idle" | "inProgress" | "complete";
@@ -31,12 +32,16 @@ type FlipNonMatchesDownAction = {
 type IncrementTimeAction = {
   type: "incrementTime";
 };
+type RestartGameAction = {
+  type: "restartGame";
+};
 
 type GameActions =
   | FlipUpAction
   | CheckMatchAction
   | FlipNonMatchesDownAction
-  | IncrementTimeAction;
+  | IncrementTimeAction
+  | RestartGameAction;
 
 function gameReducer(state: GameState, action: GameActions): GameState {
   switch (action.type) {
@@ -111,14 +116,13 @@ function gameReducer(state: GameState, action: GameActions): GameState {
       if (state.state !== "inProgress") return state;
       return { ...state, timer: state.timer + 1000 };
     }
+    case "restartGame": {
+      return getInitialGameState();
+    }
     default:
       return state;
   }
 }
-
-// state needed
-// array of items on the board
-// item has value, turned, matched, which player matched it
 
 function getGameNumbers(size: 4 | 6 = 4) {
   const uniqueNumberCount = (size * size) / 2;
@@ -203,8 +207,6 @@ function App() {
     <main className={styles.main}>
       <h1 className={styles.heading}>memory</h1>
 
-      {getIsGameComplete(gameState.cards) && <div>Game complete</div>}
-
       <ul className={styles.cardGrid}>
         {gameState.cards.map((card, index) => (
           <li key={index}>
@@ -228,6 +230,44 @@ function App() {
           <p className={styles.metadataValue}>{gameState.moves}</p>
         </div>
       </div>
+
+      <Dialog.Root open={gameState.state === "complete"}>
+        <Dialog.Portal>
+          <Dialog.Overlay className={styles.dialogOverlay} />
+          <div className={styles.dialogPositioner}>
+            <Dialog.Content className={styles.dialogContent}>
+              <div className={styles.dialogHeader}>
+                <Dialog.Title className={styles.dialogHeading}>
+                  You did it!
+                </Dialog.Title>
+                <p className={styles.dialogSubheading}>
+                  Game over! Here&apos;s how you got on&hellip;
+                </p>
+              </div>
+              <dl className={styles.stack8}>
+                <div className={styles.gameScoreItem}>
+                  <dt className={styles.gameScoreDt}>Time Elapsed</dt>
+                  <dd className={styles.gameScoreDd}>{formattedDuration}</dd>
+                </div>
+                <div className={styles.gameScoreItem}>
+                  <dt className={styles.gameScoreDt}>Moves Taken</dt>
+                  <dd className={styles.gameScoreDd}>
+                    {gameState.moves} Moves
+                  </dd>
+                </div>
+              </dl>
+              <div className={styles.stack16}>
+                <button
+                  className={styles.buttonPrimary}
+                  onClick={() => dispatch({ type: "restartGame" })}
+                >
+                  Restart
+                </button>
+              </div>
+            </Dialog.Content>
+          </div>
+        </Dialog.Portal>
+      </Dialog.Root>
     </main>
   );
 }
