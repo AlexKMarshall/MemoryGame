@@ -147,8 +147,8 @@ export const greyBox = style({
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      paddingInline: "1.25rem",
-      paddingBlock: "1.5rem",
+      paddingInline: "1.5rem",
+      paddingBlock: "1.25rem",
     },
   },
 });
@@ -180,8 +180,9 @@ export const dialogOverlay = style({
 });
 
 export const dialogPositioner = style({
-  display: "grid",
-  alignContent: "center",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
   position: "fixed",
   padding: "1.5rem",
   inset: 0,
@@ -193,6 +194,8 @@ export const dialogPositioner = style({
 });
 
 export const dialogContent = style({
+  flexBasis: "42rem",
+  marginInline: "auto",
   padding: "1.5rem",
   backgroundColor: "hsl(0deg 0% 99%)",
   borderRadius: 10,
