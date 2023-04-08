@@ -40,6 +40,29 @@ export const heading = style({
   },
 });
 
+export const hideMobile = style({
+  display: "none",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      display: "block",
+    },
+  },
+});
+
+export const hideTablet = style({
+  display: "block",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      display: "none",
+    },
+  },
+});
+
+export const gameControls = style({
+  display: "flex",
+  gap: "1rem",
+});
+
 export const cardGrid = style({
   alignSelf: "center",
   display: "grid",

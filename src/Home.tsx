@@ -242,32 +242,47 @@ export function Home() {
       <div className={styles.layout}>
         <div className={styles.header}>
           <h1 className={styles.heading}>memory</h1>
-          <Dialog.Root>
-            <Dialog.Trigger className={styles.buttonPrimary}>
-              Menu
-            </Dialog.Trigger>
-            <Dialog.Portal>
-              <Dialog.Overlay className={styles.dialogOverlay} />
-              <div className={styles.dialogPositioner}>
-                <Dialog.Content className={styles.dialogContent}>
-                  <Stack gap={4}>
-                    <Dialog.Close
-                      className={styles.buttonPrimary}
-                      onClick={() => dispatch({ type: "restartGame" })}
-                    >
-                      Restart
-                    </Dialog.Close>
-                    <Link to="/settings" className={styles.buttonSecondary}>
-                      New Game
-                    </Link>
-                    <Dialog.Close className={styles.buttonSecondary}>
-                      Resume Game
-                    </Dialog.Close>
-                  </Stack>
-                </Dialog.Content>
-              </div>
-            </Dialog.Portal>
-          </Dialog.Root>
+          <div className={styles.hideMobile}>
+            <div className={styles.gameControls}>
+              <button
+                className={styles.buttonPrimary}
+                onClick={() => dispatch({ type: "restartGame" })}
+              >
+                Restart
+              </button>
+              <Link to="/settings" className={styles.buttonSecondary}>
+                New Game
+              </Link>
+            </div>
+          </div>
+          <div className={styles.hideTablet}>
+            <Dialog.Root>
+              <Dialog.Trigger className={styles.buttonPrimary}>
+                Menu
+              </Dialog.Trigger>
+              <Dialog.Portal>
+                <Dialog.Overlay className={styles.dialogOverlay} />
+                <div className={styles.dialogPositioner}>
+                  <Dialog.Content className={styles.dialogContent}>
+                    <Stack gap={4}>
+                      <Dialog.Close
+                        className={styles.buttonPrimary}
+                        onClick={() => dispatch({ type: "restartGame" })}
+                      >
+                        Restart
+                      </Dialog.Close>
+                      <Link to="/settings" className={styles.buttonSecondary}>
+                        New Game
+                      </Link>
+                      <Dialog.Close className={styles.buttonSecondary}>
+                        Resume Game
+                      </Dialog.Close>
+                    </Stack>
+                  </Dialog.Content>
+                </div>
+              </Dialog.Portal>
+            </Dialog.Root>
+          </div>
         </div>
         <ul className={styles.cardGrid} data-size={settings.size}>
           {gameState.cards.map((card, index) => (
