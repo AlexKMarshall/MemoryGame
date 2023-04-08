@@ -2,16 +2,27 @@ import { globalStyle, style, styleVariants } from "@vanilla-extract/css";
 
 export const main = style({
   padding: "1.5rem",
-  minHeight: "100%",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
+  height: "100%",
   backgroundColor: "hsl(0deg 0% 99%)",
   "@media": {
     "screen and (min-width: 768px)": {
       padding: "2.5rem",
     },
+    "screen and (min-width: 1024px)": {
+      padding: "4rem",
+    },
   },
+});
+
+export const layout = style({
+  boxSizing: "content-box",
+  maxWidth: 1100,
+  marginInline: "auto",
+  display: "flex",
+  flexDirection: "column",
+  gap: "1.5rem",
+  justifyContent: "space-between",
+  minHeight: "100%",
 });
 
 export const header = style({

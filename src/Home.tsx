@@ -239,100 +239,103 @@ export function Home() {
 
   return (
     <main className={styles.main}>
-      <div className={styles.header}>
-        <h1 className={styles.heading}>memory</h1>
-        <Dialog.Root>
-          <Dialog.Trigger className={styles.buttonPrimary}>Menu</Dialog.Trigger>
+      <div className={styles.layout}>
+        <div className={styles.header}>
+          <h1 className={styles.heading}>memory</h1>
+          <Dialog.Root>
+            <Dialog.Trigger className={styles.buttonPrimary}>
+              Menu
+            </Dialog.Trigger>
+            <Dialog.Portal>
+              <Dialog.Overlay className={styles.dialogOverlay} />
+              <div className={styles.dialogPositioner}>
+                <Dialog.Content className={styles.dialogContent}>
+                  <Stack gap={4}>
+                    <Dialog.Close
+                      className={styles.buttonPrimary}
+                      onClick={() => dispatch({ type: "restartGame" })}
+                    >
+                      Restart
+                    </Dialog.Close>
+                    <Link to="/settings" className={styles.buttonSecondary}>
+                      New Game
+                    </Link>
+                    <Dialog.Close className={styles.buttonSecondary}>
+                      Resume Game
+                    </Dialog.Close>
+                  </Stack>
+                </Dialog.Content>
+              </div>
+            </Dialog.Portal>
+          </Dialog.Root>
+        </div>
+        <ul className={styles.cardGrid} data-size={settings.size}>
+          {gameState.cards.map((card, index) => (
+            <li key={index}>
+              <button
+                onClick={() => handleCardSelect(index)}
+                className={styles.cardButton[card.state]}
+              >
+                {card.state === "faceDown" ? null : card.value}
+              </button>
+            </li>
+          ))}
+        </ul>
+        <div className={styles.metadataSection}>
+          <div className={styles.greyBox}>
+            <h2 className={styles.metadataHeading}>Time</h2>{" "}
+            <p className={styles.metadataValue}> {formattedDuration}</p>
+          </div>
+          <div className={styles.greyBox}>
+            <h2 className={styles.metadataHeading}>Moves</h2>{" "}
+            <p className={styles.metadataValue}>{gameState.moves}</p>
+          </div>
+        </div>
+        <Dialog.Root open={gameState.state === "complete"}>
           <Dialog.Portal>
             <Dialog.Overlay className={styles.dialogOverlay} />
             <div className={styles.dialogPositioner}>
               <Dialog.Content className={styles.dialogContent}>
-                <Stack gap={4}>
-                  <Dialog.Close
-                    className={styles.buttonPrimary}
-                    onClick={() => dispatch({ type: "restartGame" })}
-                  >
-                    Restart
-                  </Dialog.Close>
-                  <Link to="/settings" className={styles.buttonSecondary}>
-                    New Game
-                  </Link>
-                  <Dialog.Close className={styles.buttonSecondary}>
-                    Resume Game
-                  </Dialog.Close>
+                <Stack gap={{ mobile: 6, tablet: 10 }}>
+                  <Stack gap={{ mobile: 2, tablet: 4 }} align="center">
+                    <Dialog.Title className={styles.dialogHeading}>
+                      You did it!
+                    </Dialog.Title>
+                    <p className={styles.dialogSubheading}>
+                      Game over! Here&apos;s how you got on&hellip;
+                    </p>
+                  </Stack>
+                  <Stack gap={{ mobile: 2, tablet: 4 }} as="dl">
+                    <div className={styles.gameScoreItem}>
+                      <dt className={styles.gameScoreDt}>Time Elapsed</dt>
+                      <dd className={styles.gameScoreDd}>
+                        {formattedDuration}
+                      </dd>
+                    </div>
+                    <div className={styles.gameScoreItem}>
+                      <dt className={styles.gameScoreDt}>Moves Taken</dt>
+                      <dd className={styles.gameScoreDd}>
+                        {gameState.moves} Moves
+                      </dd>
+                    </div>
+                  </Stack>
+                  <div className={styles.gameCompleteActions}>
+                    <button
+                      className={styles.buttonPrimary}
+                      onClick={() => dispatch({ type: "restartGame" })}
+                    >
+                      Restart
+                    </button>
+                    <Link to="/settings" className={styles.buttonSecondary}>
+                      Setup New Game
+                    </Link>
+                  </div>
                 </Stack>
               </Dialog.Content>
             </div>
           </Dialog.Portal>
         </Dialog.Root>
       </div>
-
-      <ul className={styles.cardGrid} data-size={settings.size}>
-        {gameState.cards.map((card, index) => (
-          <li key={index}>
-            <button
-              onClick={() => handleCardSelect(index)}
-              className={styles.cardButton[card.state]}
-            >
-              {card.state === "faceDown" ? null : card.value}
-            </button>
-          </li>
-        ))}
-      </ul>
-
-      <div className={styles.metadataSection}>
-        <div className={styles.greyBox}>
-          <h2 className={styles.metadataHeading}>Time</h2>{" "}
-          <p className={styles.metadataValue}> {formattedDuration}</p>
-        </div>
-        <div className={styles.greyBox}>
-          <h2 className={styles.metadataHeading}>Moves</h2>{" "}
-          <p className={styles.metadataValue}>{gameState.moves}</p>
-        </div>
-      </div>
-
-      <Dialog.Root open={gameState.state === "complete"}>
-        <Dialog.Portal>
-          <Dialog.Overlay className={styles.dialogOverlay} />
-          <div className={styles.dialogPositioner}>
-            <Dialog.Content className={styles.dialogContent}>
-              <Stack gap={{ mobile: 6, tablet: 10 }}>
-                <Stack gap={{ mobile: 2, tablet: 4 }} align="center">
-                  <Dialog.Title className={styles.dialogHeading}>
-                    You did it!
-                  </Dialog.Title>
-                  <p className={styles.dialogSubheading}>
-                    Game over! Here&apos;s how you got on&hellip;
-                  </p>
-                </Stack>
-                <Stack gap={{ mobile: 2, tablet: 4 }} as="dl">
-                  <div className={styles.gameScoreItem}>
-                    <dt className={styles.gameScoreDt}>Time Elapsed</dt>
-                    <dd className={styles.gameScoreDd}>{formattedDuration}</dd>
-                  </div>
-                  <div className={styles.gameScoreItem}>
-                    <dt className={styles.gameScoreDt}>Moves Taken</dt>
-                    <dd className={styles.gameScoreDd}>
-                      {gameState.moves} Moves
-                    </dd>
-                  </div>
-                </Stack>
-                <div className={styles.gameCompleteActions}>
-                  <button
-                    className={styles.buttonPrimary}
-                    onClick={() => dispatch({ type: "restartGame" })}
-                  >
-                    Restart
-                  </button>
-                  <Link to="/settings" className={styles.buttonSecondary}>
-                    Setup New Game
-                  </Link>
-                </div>
-              </Stack>
-            </Dialog.Content>
-          </div>
-        </Dialog.Portal>
-      </Dialog.Root>
     </main>
   );
 }
