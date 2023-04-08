@@ -1,12 +1,12 @@
 import { useEffect, useReducer } from "react";
-import { getRandomNumbers, shuffleArray } from "./utils";
+import { getRandomNumbers, shuffleArray } from "../utils";
 import * as styles from "./Home.css";
-import { useInterval } from "./useInterval";
+import { useInterval } from "../useInterval";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Link, useSearchParams } from "react-router-dom";
 import { z } from "zod";
-import { Stack } from "./components/Stack";
-import { Button, ButtonLink } from "./components/Button";
+import { Stack } from "../components/Stack";
+import { Button, ButtonLink } from "../components/Button";
 
 type GameState = {
   state: "idle" | "inProgress" | "complete";

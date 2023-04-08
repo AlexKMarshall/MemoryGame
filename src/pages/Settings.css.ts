@@ -44,25 +44,3 @@ export const form = style([
     },
   },
 ]);
-
-// export const legend = style({
-//   color: "hsl(203deg 22% 55%)",
-//   "@media": {
-//     "screen and (min-width: 768px)": {
-//       fontSize: "1.25rem",
-//     },
-//   },
-// });
-
-// // Could be a Switcher?
-// export const radioGroup = style({
-//   display: "grid",
-//   gridAutoFlow: "column",
-//   gridAutoColumns: "1fr",
-//   gap: "0.75rem",
-//   "@media": {
-//     "screen and (min-width: 768px)": {
-//       gap: "2rem",
-//     },
-//   },
-// });

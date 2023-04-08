@@ -1,9 +1,9 @@
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Form } from "react-router-dom";
 import * as styles from "./Settings.css";
-import { Stack } from "./components/Stack";
-import { Button } from "./components/Button";
-import { RadioGroup } from "./components/RadioGroup";
+import { Stack } from "../components/Stack";
+import { Button } from "../components/Button";
+import { RadioGroup } from "../components/RadioGroup";
 
 export function Settings() {
   return (
