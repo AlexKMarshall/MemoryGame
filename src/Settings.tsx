@@ -10,7 +10,7 @@ export function Settings() {
       <Form action="/" className={styles.form}>
         <Stack gap={8}>
           <div role="radiogroup" aria-labelledby="size">
-            <Stack gap={3}>
+            <Stack gap={{ mobile: 3, tablet: 4 }}>
               <p id="size" className={styles.legend}>
                 Grid Size
               </p>
