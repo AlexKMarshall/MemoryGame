@@ -1,4 +1,4 @@
-import { style, styleVariants } from "@vanilla-extract/css";
+import { globalStyle, style, styleVariants } from "@vanilla-extract/css";
 
 export const main = style({
   padding: "1.5rem",
@@ -188,18 +188,30 @@ export const dialogContent = style({
   "@media": {
     "screen and (min-width: 768px)": {
       padding: "3.5rem",
+      borderRadius: 20,
     },
   },
 });
 
 export const dialogHeading = style({
   fontSize: "1.5rem",
+  lineHeight: 1.25,
   color: "hsl(206deg 45% 15%)",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      fontSize: "3rem",
+    },
+  },
 });
 
 export const dialogSubheading = style({
   fontSize: "0.875rem",
   color: "hsl(203deg 22% 55%)",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      fontSize: "1.125rem",
+    },
+  },
 });
 
 export const gameScoreItem = style({
@@ -209,16 +221,49 @@ export const gameScoreItem = style({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      paddingInline: "2rem",
+      paddingBlock: "1rem",
+      borderRadius: 10,
+    },
+  },
 });
 
 export const gameScoreDt = style({
   fontSize: "0.875rem",
   color: "hsl(203deg 22% 55%)",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      fontSize: "1.125rem",
+    },
+  },
 });
 
 export const gameScoreDd = style({
   fontSize: "1.25rem",
   color: "hsl(205deg 30% 27%)",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      fontSize: "2rem",
+    },
+  },
+});
+
+export const gameCompleteActions = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: "1rem",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      flexDirection: "row",
+      gap: "0.75rem",
+    },
+  },
+});
+
+globalStyle(`${gameCompleteActions} > *`, {
+  flex: 1,
 });
 
 export const buttonBase = style({
@@ -228,6 +273,13 @@ export const buttonBase = style({
   borderRadius: 999,
   display: "flex",
   justifyContent: "center",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      paddingBlock: "1rem",
+      paddingInline: "1.75rem",
+      fontSize: "1.125rem",
+    },
+  },
 });
 
 export const buttonPrimary = style([

@@ -291,13 +291,13 @@ export function Home() {
         </div>
       </div>
 
-      <Dialog.Root open={true}>
+      <Dialog.Root open={gameState.state === "complete"}>
         <Dialog.Portal>
           <Dialog.Overlay className={styles.dialogOverlay} />
           <div className={styles.dialogPositioner}>
             <Dialog.Content className={styles.dialogContent}>
-              <Stack gap={6}>
-                <Stack gap={2} align="center">
+              <Stack gap={{ mobile: 6, tablet: 10 }}>
+                <Stack gap={{ mobile: 2, tablet: 4 }} align="center">
                   <Dialog.Title className={styles.dialogHeading}>
                     You did it!
                   </Dialog.Title>
@@ -305,7 +305,7 @@ export function Home() {
                     Game over! Here&apos;s how you got on&hellip;
                   </p>
                 </Stack>
-                <Stack gap={2} as="dl">
+                <Stack gap={{ mobile: 2, tablet: 4 }} as="dl">
                   <div className={styles.gameScoreItem}>
                     <dt className={styles.gameScoreDt}>Time Elapsed</dt>
                     <dd className={styles.gameScoreDd}>{formattedDuration}</dd>
@@ -317,7 +317,7 @@ export function Home() {
                     </dd>
                   </div>
                 </Stack>
-                <Stack gap={4}>
+                <div className={styles.gameCompleteActions}>
                   <button
                     className={styles.buttonPrimary}
                     onClick={() => dispatch({ type: "restartGame" })}
@@ -327,7 +327,7 @@ export function Home() {
                   <Link to="/settings" className={styles.buttonSecondary}>
                     Setup New Game
                   </Link>
-                </Stack>
+                </div>
               </Stack>
             </Dialog.Content>
           </div>
