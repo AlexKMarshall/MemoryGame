@@ -1,10 +1,11 @@
-import { style } from "@vanilla-extract/css";
+import { globalStyle, style } from "@vanilla-extract/css";
 
 export const main = style({
   padding: "1.5rem",
   minHeight: "100%",
   backgroundColor: "hsl(206deg 45% 15%)",
   display: "grid",
+  gridTemplateColumns: "1fr minmax(auto, 42rem) 1fr",
   gridTemplateRows: "1fr auto 1fr",
   alignItems: "center",
   "@media": {
@@ -12,6 +13,10 @@ export const main = style({
       padding: "3rem",
     },
   },
+});
+
+globalStyle(`${main} > *`, {
+  gridColumn: "2 / 3",
 });
 
 export const heading = style({
@@ -27,6 +32,7 @@ export const heading = style({
 
 export const form = style([
   {
+    flexBasis: "42rem",
     padding: "1.5rem",
     backgroundColor: "hsl(0deg 0% 99%)",
     borderRadius: 10,
