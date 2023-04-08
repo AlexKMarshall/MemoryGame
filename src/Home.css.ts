@@ -302,35 +302,3 @@ export const gameCompleteActions = style({
 globalStyle(`${gameCompleteActions} > *`, {
   flex: 1,
 });
-
-export const buttonBase = style({
-  paddingBlock: "0.75rem",
-  paddingInline: "1.25rem",
-  border: "none",
-  borderRadius: 999,
-  display: "flex",
-  justifyContent: "center",
-  "@media": {
-    "screen and (min-width: 768px)": {
-      paddingBlock: "1rem",
-      paddingInline: "1.75rem",
-      fontSize: "1.125rem",
-    },
-  },
-});
-
-export const buttonPrimary = style([
-  buttonBase,
-  {
-    backgroundColor: "hsl(37deg 98% 54%)",
-    color: "hsl(0deg 0% 99%)",
-  },
-]);
-
-export const buttonSecondary = style([
-  buttonBase,
-  {
-    backgroundColor: "hsl(203deg 25% 90%)",
-    color: "hsl(205deg 30% 27%)",
-  },
-]);

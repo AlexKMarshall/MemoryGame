@@ -6,6 +6,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Link, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { Stack } from "./components/Stack";
+import { Button, ButtonLink } from "./components/Button";
 
 type GameState = {
   state: "idle" | "inProgress" | "complete";
@@ -244,21 +245,21 @@ export function Home() {
           <h1 className={styles.heading}>memory</h1>
           <div className={styles.hideMobile}>
             <div className={styles.gameControls}>
-              <button
-                className={styles.buttonPrimary}
+              <Button
+                color="primary"
                 onClick={() => dispatch({ type: "restartGame" })}
               >
                 Restart
-              </button>
-              <Link to="/settings" className={styles.buttonSecondary}>
+              </Button>
+              <ButtonLink to="/settings" color="secondary">
                 New Game
-              </Link>
+              </ButtonLink>
             </div>
           </div>
           <div className={styles.hideTablet}>
             <Dialog.Root>
-              <Dialog.Trigger className={styles.buttonPrimary}>
-                Menu
+              <Dialog.Trigger asChild>
+                <Button color="primary">Menu</Button>
               </Dialog.Trigger>
               <Dialog.Portal>
                 <Dialog.Overlay className={styles.dialogOverlay} />
@@ -266,16 +267,16 @@ export function Home() {
                   <Dialog.Content className={styles.dialogContent}>
                     <Stack gap={4}>
                       <Dialog.Close
-                        className={styles.buttonPrimary}
+                        asChild
                         onClick={() => dispatch({ type: "restartGame" })}
                       >
-                        Restart
+                        <Button color="primary">Restart</Button>
                       </Dialog.Close>
-                      <Link to="/settings" className={styles.buttonSecondary}>
+                      <ButtonLink to="/settings" color="secondary">
                         New Game
-                      </Link>
-                      <Dialog.Close className={styles.buttonSecondary}>
-                        Resume Game
+                      </ButtonLink>
+                      <Dialog.Close asChild>
+                        <Button color="primary">Resume Game</Button>
                       </Dialog.Close>
                     </Stack>
                   </Dialog.Content>
@@ -335,15 +336,15 @@ export function Home() {
                     </div>
                   </Stack>
                   <div className={styles.gameCompleteActions}>
-                    <button
-                      className={styles.buttonPrimary}
+                    <Button
+                      color="primary"
                       onClick={() => dispatch({ type: "restartGame" })}
                     >
                       Restart
-                    </button>
-                    <Link to="/settings" className={styles.buttonSecondary}>
+                    </Button>
+                    <ButtonLink to="/settings" color="secondary">
                       Setup New Game
-                    </Link>
+                    </ButtonLink>
                   </div>
                 </Stack>
               </Dialog.Content>

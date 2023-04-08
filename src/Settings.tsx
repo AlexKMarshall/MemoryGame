@@ -2,6 +2,7 @@ import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Form } from "react-router-dom";
 import * as styles from "./Settings.css";
 import { Stack } from "./components/Stack";
+import { Button } from "./components/Button";
 
 export function Settings() {
   return (
@@ -36,9 +37,9 @@ export function Settings() {
               </div>
             </Stack>
           </div>
-          <button type="submit" className={styles.submitButton}>
+          <Button type="submit" color="primary" size="large">
             Start Game
-          </button>
+          </Button>
         </Stack>
       </Form>
     </main>

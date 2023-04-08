@@ -89,23 +89,3 @@ export const radio = style({
     },
   },
 });
-
-// Possibly just a larger button variant?
-export const submitButton = style({
-  paddingBlock: "0.75rem",
-  paddingInline: "1.25rem",
-  fontSize: "1.125rem",
-  border: "none",
-  borderRadius: 999,
-  display: "flex",
-  justifyContent: "center",
-  backgroundColor: "hsl(37deg 98% 54%)",
-  color: "hsl(0deg 0% 99%)",
-  "@media": {
-    "screen and (min-width: 768px)": {
-      paddingBlock: "1rem",
-      paddingInline: "1.75rem",
-      fontSize: "2rem",
-    },
-  },
-});
