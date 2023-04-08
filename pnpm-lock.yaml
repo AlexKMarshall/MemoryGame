@@ -10,6 +10,9 @@ dependencies:
   '@vanilla-extract/css':
     specifier: ^1.11.0
     version: 1.11.0
+  '@vanilla-extract/sprinkles':
+    specifier: ^1.5.2
+    version: 1.5.2(@vanilla-extract/css@1.11.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -1102,6 +1105,14 @@ packages:
 
   /@vanilla-extract/private@1.0.3:
     resolution: {integrity: sha512-17kVyLq3ePTKOkveHxXuIJZtGYs+cSoev7BlP+Lf4916qfDhk/HBjvlYDe8egrea7LNPHKwSZJK/bzZC+Q6AwQ==}
+
+  /@vanilla-extract/sprinkles@1.5.2(@vanilla-extract/css@1.11.0):
+    resolution: {integrity: sha512-qtZ5+I5sRtzMXmHBTKJJFLNXgwoFRWdtRh/SJm7BCYD5yY+X4f/I6kwogM0DwxnUr7THYbzjZcEm5OE/WvQAZQ==}
+    peerDependencies:
+      '@vanilla-extract/css': ^1.0.0
+    dependencies:
+      '@vanilla-extract/css': 1.11.0
+    dev: false
 
   /@vanilla-extract/vite-plugin@3.8.0(vite@4.2.1):
     resolution: {integrity: sha512-HBCecR4eTbweo7wQPq9g/HBvxUi6Cua8O4Xk6t1by4W/imgEsHbRCCa9SowzZwg8lub7uJHBAdzWWpqY+LdH0w==}
