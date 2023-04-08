@@ -45,47 +45,24 @@ export const form = style([
   },
 ]);
 
-export const legend = style({
-  color: "hsl(203deg 22% 55%)",
-  "@media": {
-    "screen and (min-width: 768px)": {
-      fontSize: "1.25rem",
-    },
-  },
-});
+// export const legend = style({
+//   color: "hsl(203deg 22% 55%)",
+//   "@media": {
+//     "screen and (min-width: 768px)": {
+//       fontSize: "1.25rem",
+//     },
+//   },
+// });
 
-export const radioGroup = style({
-  display: "grid",
-  gridAutoFlow: "column",
-  gridAutoColumns: "1fr",
-  gap: "0.75rem",
-  "@media": {
-    "screen and (min-width: 768px)": {
-      gap: "2rem",
-    },
-  },
-});
-
-// how does this relate to the button secondary variant?
-export const radio = style({
-  paddingBlock: "0.75rem",
-  paddingInline: "1.25rem",
-  border: "none",
-  borderRadius: 999,
-  display: "flex",
-  justifyContent: "center",
-  backgroundColor: "hsl(203deg 28% 79%)",
-  color: "hsl(0deg 0% 99%)",
-
-  "@media": {
-    "screen and (min-width: 768px)": {
-      fontSize: "1.5rem",
-    },
-  },
-
-  selectors: {
-    ":checked + &": {
-      backgroundColor: "hsl(205deg 30% 27%)",
-    },
-  },
-});
+// // Could be a Switcher?
+// export const radioGroup = style({
+//   display: "grid",
+//   gridAutoFlow: "column",
+//   gridAutoColumns: "1fr",
+//   gap: "0.75rem",
+//   "@media": {
+//     "screen and (min-width: 768px)": {
+//       gap: "2rem",
+//     },
+//   },
+// });

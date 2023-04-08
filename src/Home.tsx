@@ -276,7 +276,7 @@ export function Home() {
                         New Game
                       </ButtonLink>
                       <Dialog.Close asChild>
-                        <Button color="primary">Resume Game</Button>
+                        <Button color="secondary">Resume Game</Button>
                       </Dialog.Close>
                     </Stack>
                   </Dialog.Content>

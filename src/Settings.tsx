@@ -3,6 +3,7 @@ import { Form } from "react-router-dom";
 import * as styles from "./Settings.css";
 import { Stack } from "./components/Stack";
 import { Button } from "./components/Button";
+import { RadioGroup } from "./components/RadioGroup";
 
 export function Settings() {
   return (
@@ -10,33 +11,15 @@ export function Settings() {
       <h1 className={styles.heading}>memory</h1>
       <Form action="/" className={styles.form}>
         <Stack gap={8}>
-          <div role="radiogroup" aria-labelledby="size">
-            <Stack gap={{ mobile: 3, tablet: 4 }}>
-              <p id="size" className={styles.legend}>
-                Grid Size
-              </p>
-              <div className={styles.radioGroup}>
-                <VisuallyHidden.Root asChild>
-                  <input
-                    type="radio"
-                    id="4"
-                    name="size"
-                    value="4"
-                    defaultChecked
-                  />
-                </VisuallyHidden.Root>
-                <label htmlFor="4" className={styles.radio}>
-                  4x4
-                </label>
-                <VisuallyHidden.Root asChild>
-                  <input type="radio" id="6" name="size" value="6" />
-                </VisuallyHidden.Root>
-                <label htmlFor="6" className={styles.radio}>
-                  6x6
-                </label>
-              </div>
-            </Stack>
-          </div>
+          <RadioGroup name="size">
+            <RadioGroup.Label>Grid Size</RadioGroup.Label>
+            <RadioGroup.Controls>
+              <RadioGroup.Option value="4" defaultChecked>
+                4x4
+              </RadioGroup.Option>
+              <RadioGroup.Option value="6">6x6</RadioGroup.Option>
+            </RadioGroup.Controls>
+          </RadioGroup>
           <Button type="submit" color="primary" size="large">
             Start Game
           </Button>
