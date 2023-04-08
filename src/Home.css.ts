@@ -181,46 +181,6 @@ export const dialogPositioner = style({
   },
 });
 
-const stackBase = style({
-  display: "flex",
-  flexDirection: "column",
-});
-
-export const stack8 = style([
-  stackBase,
-  {
-    gap: "0.5rem",
-  },
-]);
-
-export const stack12 = style([
-  stackBase,
-  {
-    gap: "0.75rem",
-  },
-]);
-
-export const stack16 = style([
-  stackBase,
-  {
-    gap: "1rem",
-  },
-]);
-
-export const stack24 = style([
-  stackBase,
-  {
-    gap: "1.5rem",
-  },
-]);
-
-export const stack32 = style([
-  stackBase,
-  {
-    gap: "2rem",
-  },
-]);
-
 export const dialogContent = style({
   padding: "1.5rem",
   backgroundColor: "hsl(0deg 0% 99%)",
@@ -231,17 +191,6 @@ export const dialogContent = style({
     },
   },
 });
-
-export const gameOverDialogContent = style([dialogContent, stack24]);
-
-export const menuDialogContent = style([dialogContent, stack16]);
-
-export const dialogHeader = style([
-  stack8,
-  {
-    alignItems: "center",
-  },
-]);
 
 export const dialogHeading = style({
   fontSize: "1.5rem",

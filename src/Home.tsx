@@ -5,6 +5,7 @@ import { useInterval } from "./useInterval";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Link, useSearchParams } from "react-router-dom";
 import { z } from "zod";
+import { Stack } from "./components/Stack";
 
 type GameState = {
   state: "idle" | "inProgress" | "complete";
@@ -245,8 +246,8 @@ export function Home() {
           <Dialog.Portal>
             <Dialog.Overlay className={styles.dialogOverlay} />
             <div className={styles.dialogPositioner}>
-              <Dialog.Content className={styles.menuDialogContent}>
-                <div className={styles.stack16}>
+              <Dialog.Content className={styles.dialogContent}>
+                <Stack gap={4}>
                   <Dialog.Close
                     className={styles.buttonPrimary}
                     onClick={() => dispatch({ type: "restartGame" })}
@@ -259,7 +260,7 @@ export function Home() {
                   <Dialog.Close className={styles.buttonSecondary}>
                     Resume Game
                   </Dialog.Close>
-                </div>
+                </Stack>
               </Dialog.Content>
             </div>
           </Dialog.Portal>
@@ -290,42 +291,44 @@ export function Home() {
         </div>
       </div>
 
-      <Dialog.Root open={gameState.state === "complete"}>
+      <Dialog.Root open={true}>
         <Dialog.Portal>
           <Dialog.Overlay className={styles.dialogOverlay} />
           <div className={styles.dialogPositioner}>
-            <Dialog.Content className={styles.gameOverDialogContent}>
-              <div className={styles.dialogHeader}>
-                <Dialog.Title className={styles.dialogHeading}>
-                  You did it!
-                </Dialog.Title>
-                <p className={styles.dialogSubheading}>
-                  Game over! Here&apos;s how you got on&hellip;
-                </p>
-              </div>
-              <dl className={styles.stack8}>
-                <div className={styles.gameScoreItem}>
-                  <dt className={styles.gameScoreDt}>Time Elapsed</dt>
-                  <dd className={styles.gameScoreDd}>{formattedDuration}</dd>
-                </div>
-                <div className={styles.gameScoreItem}>
-                  <dt className={styles.gameScoreDt}>Moves Taken</dt>
-                  <dd className={styles.gameScoreDd}>
-                    {gameState.moves} Moves
-                  </dd>
-                </div>
-              </dl>
-              <div className={styles.stack16}>
-                <button
-                  className={styles.buttonPrimary}
-                  onClick={() => dispatch({ type: "restartGame" })}
-                >
-                  Restart
-                </button>
-                <Link to="/settings" className={styles.buttonSecondary}>
-                  Setup New Game
-                </Link>
-              </div>
+            <Dialog.Content className={styles.dialogContent}>
+              <Stack gap={6}>
+                <Stack gap={2} align="center">
+                  <Dialog.Title className={styles.dialogHeading}>
+                    You did it!
+                  </Dialog.Title>
+                  <p className={styles.dialogSubheading}>
+                    Game over! Here&apos;s how you got on&hellip;
+                  </p>
+                </Stack>
+                <Stack gap={2} as="dl">
+                  <div className={styles.gameScoreItem}>
+                    <dt className={styles.gameScoreDt}>Time Elapsed</dt>
+                    <dd className={styles.gameScoreDd}>{formattedDuration}</dd>
+                  </div>
+                  <div className={styles.gameScoreItem}>
+                    <dt className={styles.gameScoreDt}>Moves Taken</dt>
+                    <dd className={styles.gameScoreDd}>
+                      {gameState.moves} Moves
+                    </dd>
+                  </div>
+                </Stack>
+                <Stack gap={4}>
+                  <button
+                    className={styles.buttonPrimary}
+                    onClick={() => dispatch({ type: "restartGame" })}
+                  >
+                    Restart
+                  </button>
+                  <Link to="/settings" className={styles.buttonSecondary}>
+                    Setup New Game
+                  </Link>
+                </Stack>
+              </Stack>
             </Dialog.Content>
           </div>
         </Dialog.Portal>

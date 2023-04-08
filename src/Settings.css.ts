@@ -1,5 +1,5 @@
 import { style } from "@vanilla-extract/css";
-import { buttonBase, buttonPrimary, stack12, stack32 } from "./Home.css";
+import { buttonBase, buttonPrimary } from "./Home.css";
 
 export const main = style({
   padding: "1.5rem",
@@ -17,15 +17,12 @@ export const heading = style({
 });
 
 export const form = style([
-  stack32,
   {
     padding: "1.5rem",
     backgroundColor: "hsl(0deg 0% 99%)",
     borderRadius: 10,
   },
 ]);
-
-export const fieldset = stack12;
 
 export const legend = style({
   color: "hsl(203deg 22% 55%)",
