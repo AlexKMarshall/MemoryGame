@@ -1,8 +1,4 @@
-import {
-  AnchorHTMLAttributes,
-  ButtonHTMLAttributes,
-  ComponentProps,
-} from "react";
+import { ButtonHTMLAttributes, ComponentProps } from "react";
 import * as styles from "./Button.css";
 import type { ButtonVariants } from "./Button.css";
 import { Link } from "react-router-dom";
@@ -21,6 +17,9 @@ type LinkProps = ComponentProps<typeof Link>;
 
 export type ButtonLinkProps = Omit<LinkProps, "className"> & ButtonVariants;
 
+/**
+ * A Link with button styles
+ */
 export function ButtonLink({ size, color, ...props }: ButtonLinkProps) {
   return <Link {...props} className={styles.Button({ size, color })} />;
 }

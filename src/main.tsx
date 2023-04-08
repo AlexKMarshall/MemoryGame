@@ -4,7 +4,7 @@ import { Home } from "./pages/Home";
 import "./reset.css";
 import "./typography.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Settings } from "./Settings";
+import { Settings } from "./pages/Settings";
 
 const router = createBrowserRouter([
   {
