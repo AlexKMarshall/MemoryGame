@@ -174,6 +174,11 @@ export const dialogPositioner = style({
   position: "fixed",
   padding: "1.5rem",
   inset: 0,
+  "@media": {
+    "screen and (min-width: 768px)": {
+      padding: "3.5rem",
+    },
+  },
 });
 
 const stackBase = style({
@@ -220,6 +225,11 @@ export const dialogContent = style({
   padding: "1.5rem",
   backgroundColor: "hsl(0deg 0% 99%)",
   borderRadius: 10,
+  "@media": {
+    "screen and (min-width: 768px)": {
+      padding: "3.5rem",
+    },
+  },
 });
 
 export const gameOverDialogContent = style([dialogContent, stack24]);
