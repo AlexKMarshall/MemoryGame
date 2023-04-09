@@ -1,11 +1,4 @@
-import {
-  ReactNode,
-  RefObject,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
+import { ReactNode, RefObject, useEffect, useReducer } from "react";
 import { getNextIndex } from "../utils";
 
 type Id = string | number;
@@ -173,22 +166,28 @@ export function LayoutGrid<T>({
     isAutoFocusEnabled: false,
   });
 
-  useEffect(function focusTabStop() {
-    if (!state.isAutoFocusEnabled) return;
+  useEffect(
+    function focusTabStop() {
+      if (!state.isAutoFocusEnabled) return;
 
-    const tabStop = state.tabStops.get(state.currentFocusedId);
-    if (!tabStop) {
-      console.warn(
-        `Tab stop with id ${state.currentFocusedId} does not exist. Trying to focus tab stop.`
-      );
-      return;
-    }
+      const tabStop = state.tabStops.get(state.currentFocusedId);
+      if (!tabStop) {
+        console.warn(
+          `Tab stop with id ${state.currentFocusedId} does not exist. Trying to focus tab stop.`
+        );
+        return;
+      }
 
-    tabStop.current?.focus();
-  }, []);
+      tabStop.current?.focus();
+    },
+    [state.currentFocusedId, state.isAutoFocusEnabled, state.tabStops]
+  );
 
   return (
-    <ul data-rowLength={rowLength}>
+    <ul
+      data-rowLength={rowLength}
+      onFocus={() => dispatch({ type: "enableAutoFocus" })}
+    >
       {items.map((item) => (
         <li key={item.id}>{children(item)}</li>
       ))}
