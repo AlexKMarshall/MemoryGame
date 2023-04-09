@@ -46,3 +46,22 @@ export function getRandomNumbers({
 }) {
   return shuffleArray(getNumberSequence({ min, max })).slice(0, length);
 }
+
+/**
+ * returns the next selected index in an array based on the current index and
+ * the direction of the movement
+ * @returns number
+ */
+export function getNextIndex({
+  currentIndex,
+  direction,
+  length,
+}: {
+  currentIndex: number;
+  direction: "left" | "right";
+  /** length of the array */
+  length: number;
+}) {
+  const nextIndex = direction === "left" ? currentIndex - 1 : currentIndex + 1;
+  return nextIndex < 0 ? length - 1 : nextIndex % length;
+}

@@ -1,5 +1,10 @@
 import { test, describe, expect } from "vitest";
-import { getNumberSequence, getRandomNumbers, shuffleArray } from "./utils";
+import {
+  getNextIndex,
+  getNumberSequence,
+  getRandomNumbers,
+  shuffleArray,
+} from "./utils";
 
 describe("getNumberSequence", () => {
   test("generates sequence of numbers", () => {
@@ -40,5 +45,22 @@ describe("getRandomNumbers", () => {
     const length = 5;
     const randomNumbers = getRandomNumbers({ min, max, length });
     expect(new Set(randomNumbers).size).toEqual(length);
+  });
+});
+
+describe("getNextIndex", () => {
+  test("returns the next index in the array based on the direction of the movement", () => {
+    expect(
+      getNextIndex({ currentIndex: 0, direction: "right", length: 5 })
+    ).toEqual(1);
+    expect(
+      getNextIndex({ currentIndex: 0, direction: "left", length: 5 })
+    ).toEqual(4);
+    expect(
+      getNextIndex({ currentIndex: 4, direction: "right", length: 5 })
+    ).toEqual(0);
+    expect(
+      getNextIndex({ currentIndex: 4, direction: "left", length: 5 })
+    ).toEqual(3);
   });
 });
