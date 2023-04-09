@@ -78,8 +78,9 @@ type FocusAction = {
 
 type NavigateAction = {
   type: "navigate";
-  direction: "left" | "right";
+  direction: "left" | "right" | "up" | "down";
   currentIdList: Id[];
+  rowLength?: number;
 };
 
 type EnableAutoFocusAction = {
@@ -146,7 +147,7 @@ function rovingTabFocusReducer(
       };
     }
     case "navigate": {
-      const { direction, currentIdList } = action;
+      const { direction, currentIdList, rowLength } = action;
       const { currentFocusedId } = state;
       const currentIndex = currentIdList.indexOf(currentFocusedId);
 
@@ -161,6 +162,7 @@ function rovingTabFocusReducer(
         currentIndex,
         direction,
         length: currentIdList.length,
+        rowLength,
       });
       const nextId = currentIdList[nextIndex];
 
@@ -184,6 +186,10 @@ function getKeyDirection(key: string) {
       return "left";
     case "ArrowRight":
       return "right";
+    case "ArrowUp":
+      return "up";
+    case "ArrowDown":
+      return "down";
     default:
       return null;
   }
@@ -226,7 +232,12 @@ export function LayoutGrid<T>({
     // if the key pressed is not an arrow key, do nothing
     if (!direction) return;
 
-    dispatch({ type: "navigate", direction, currentIdList: listOfIds });
+    dispatch({
+      type: "navigate",
+      direction,
+      currentIdList: listOfIds,
+      rowLength,
+    });
   }
 
   return (

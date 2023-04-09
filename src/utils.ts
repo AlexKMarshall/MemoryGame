@@ -56,12 +56,49 @@ export function getNextIndex({
   currentIndex,
   direction,
   length,
+  rowLength = 1,
 }: {
   currentIndex: number;
-  direction: "left" | "right";
+  direction: "left" | "right" | "up" | "down";
   /** length of the array */
   length: number;
+  /** number of items to show in a row */
+  rowLength?: number;
 }) {
-  const nextIndex = direction === "left" ? currentIndex - 1 : currentIndex + 1;
-  return nextIndex < 0 ? length - 1 : nextIndex % length;
+  const isLeft = direction === "left";
+  const isRight = direction === "right";
+  const isUp = direction === "up";
+  const isDown = direction === "down";
+
+  const isLeftEdge = currentIndex % rowLength === 0;
+  const isRightEdge = currentIndex % rowLength === rowLength - 1;
+  const isTopEdge = currentIndex < rowLength;
+  const isBottomEdge = currentIndex >= length - rowLength;
+
+  // if (isLeft) {
+  //   const leftOffset = -1;
+  //   return (currentIndex + leftOffset + length) % length;
+  // }
+
+  // if (isRight) {
+  //   const rightOffset = 1;
+  //   return (currentIndex + rightOffset + length) % length;
+  // }
+
+  if (isLeft && isLeftEdge) {
+    return currentIndex + rowLength - 1;
+  }
+  if (isRight && isRightEdge) {
+    return currentIndex - rowLength + 1;
+  }
+  if (isUp && isTopEdge) {
+    return currentIndex + length - rowLength;
+  }
+  if (isDown && isBottomEdge) {
+    return currentIndex - length + rowLength;
+  }
+
+  return (
+    currentIndex + (isLeft ? -1 : isRight ? 1 : isUp ? -rowLength : rowLength)
+  );
 }

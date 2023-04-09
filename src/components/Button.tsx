@@ -9,6 +9,8 @@ export type ButtonProps = Omit<
 > &
   ButtonVariants;
 
+// TODO: forward refs
+
 export function Button({ size, color, ...props }: ButtonProps) {
   return <button {...props} className={styles.Button({ size, color })} />;
 }

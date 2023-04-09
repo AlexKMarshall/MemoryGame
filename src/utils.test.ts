@@ -49,18 +49,172 @@ describe("getRandomNumbers", () => {
 });
 
 describe("getNextIndex", () => {
-  test("returns the next index in the array based on the direction of the movement", () => {
-    expect(
-      getNextIndex({ currentIndex: 0, direction: "right", length: 5 })
-    ).toEqual(1);
-    expect(
-      getNextIndex({ currentIndex: 0, direction: "left", length: 5 })
-    ).toEqual(4);
-    expect(
-      getNextIndex({ currentIndex: 4, direction: "right", length: 5 })
-    ).toEqual(0);
-    expect(
-      getNextIndex({ currentIndex: 4, direction: "left", length: 5 })
-    ).toEqual(3);
+  describe("move left", () => {
+    test("from top left corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 0,
+          direction: "left",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(3);
+    });
+    test("from top right corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 3,
+          direction: "left",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(2);
+    });
+    test("from bottom left corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 12,
+          direction: "left",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(15);
+    });
+    test("from bottom right corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 15,
+          direction: "left",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(14);
+    });
+  });
+  describe("move right", () => {
+    test("from top left corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 0,
+          direction: "right",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(1);
+    });
+    test("from top right corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 3,
+          direction: "right",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(0);
+    });
+    test("from bottom left corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 12,
+          direction: "right",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(13);
+    });
+    test("from bottom right corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 15,
+          direction: "right",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(12);
+    });
+  });
+  describe("move up", () => {
+    test("from top left corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 0,
+          direction: "up",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(12);
+    });
+    test("from top right corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 3,
+          direction: "up",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(15);
+    });
+    test("from bottom left corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 12,
+          direction: "up",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(8);
+    });
+    test("from bottom right corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 15,
+          direction: "up",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(11);
+    });
+  });
+  describe("move down", () => {
+    test("from top left corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 0,
+          direction: "down",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(4);
+    });
+    test("from top right corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 3,
+          direction: "down",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(7);
+    });
+    test("from bottom left corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 12,
+          direction: "down",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(0);
+    });
+    test("from bottom right corner", () => {
+      expect(
+        getNextIndex({
+          currentIndex: 15,
+          direction: "down",
+          length: 16,
+          rowLength: 4,
+        })
+      ).toEqual(3);
+    });
   });
 });
