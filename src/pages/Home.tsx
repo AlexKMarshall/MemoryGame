@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { ReactNode, useEffect, useReducer } from "react";
 import { getRandomNumbers, shuffleArray } from "../utils";
 import * as styles from "./Home.css";
 import { useInterval } from "../hooks/useInterval";
@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { Stack } from "../components/Stack";
 import { Button, ButtonLink } from "../components/Button";
+import { LayoutGrid, useRovingTabItem } from "../components/LayoutGrid";
 
 type GameState = {
   state: "idle" | "inProgress" | "complete";
@@ -19,6 +20,7 @@ type GameState = {
 };
 
 type CardState = {
+  id: number;
   value: number;
   state: "faceDown" | "faceUp" | "matched";
 };
@@ -108,20 +110,22 @@ function getGameReducer(settings: Settings) {
         );
         const values = faceUpCards.map((card) => card.value);
         const isMatch = values.every((value) => value === values[0]);
-        if (!isMatch) {
-          return {
-            ...state,
-            cards: state.cards.map((card) => {
-              if (card.state === "faceUp") {
-                return {
-                  ...card,
-                  state: "faceDown",
-                };
-              }
-              return card;
-            }),
-          };
+        // no need to flip down if there is a match
+        if (isMatch) {
+          return state;
         }
+        return {
+          ...state,
+          cards: state.cards.map((card) => {
+            if (card.state === "faceUp") {
+              return {
+                ...card,
+                state: "faceDown",
+              };
+            }
+            return card;
+          }),
+        };
       }
 
       case "incrementTime": {
@@ -174,7 +178,8 @@ const defaultSettings = {
 function getInitialGameState(settings: Settings) {
   const numbers = getGameNumbers(settings.size);
   return {
-    cards: numbers.map((number) => ({
+    cards: numbers.map((number, index) => ({
+      id: index,
       value: number,
       state: "faceDown",
     })),
@@ -285,7 +290,22 @@ export function Home() {
             </Dialog.Root>
           </div>
         </div>
-        <ul className={styles.cardGrid} data-size={settings.size}>
+        <LayoutGrid
+          items={gameState.cards}
+          rowLength={settings.size}
+          className={styles.cardGrid}
+        >
+          {(card) => (
+            <Card
+              id={card.id}
+              onClick={() => handleCardSelect(card.id)}
+              state={card.state}
+            >
+              {card.value}
+            </Card>
+          )}
+        </LayoutGrid>
+        {/* <ul className={styles.cardGrid} data-size={settings.size}>
           {gameState.cards.map((card, index) => (
             <li key={index}>
               <button
@@ -296,7 +316,7 @@ export function Home() {
               </button>
             </li>
           ))}
-        </ul>
+        </ul> */}
         <div className={styles.metadataSection}>
           <div className={styles.greyBox}>
             <h2 className={styles.metadataHeading}>Time</h2>{" "}
@@ -353,5 +373,26 @@ export function Home() {
         </Dialog.Root>
       </div>
     </main>
+  );
+}
+
+type CardProps = {
+  id: CardState["id"];
+  children: ReactNode;
+  onClick: () => void;
+  state: CardState["state"];
+};
+function Card({ id, children, onClick, state }: CardProps) {
+  const { ref, props } = useRovingTabItem({ id });
+
+  return (
+    <button
+      {...props}
+      ref={ref}
+      onClick={onClick}
+      className={styles.cardButton[state]}
+    >
+      {state === "faceDown" ? null : children}
+    </button>
   );
 }

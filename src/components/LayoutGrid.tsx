@@ -1,14 +1,39 @@
-import { ReactNode, RefObject, useEffect, useReducer } from "react";
+import {
+  ReactNode,
+  RefObject,
+  useEffect,
+  useReducer,
+  KeyboardEvent,
+  createContext,
+  useContext,
+  useRef,
+} from "react";
 import { getNextIndex } from "../utils";
 
-type Id = string | number;
+export type Id = string | number;
 
-type CollectionItem<T> = T & {
+export type CollectionItem<T> = T & {
   /**
    * A unique identifier for this item
    */
   id: Id;
 };
+
+type RovingTabFocusContext = {
+  state: RovingTabFocusState;
+  dispatch: (action: RovingTabFocusAction) => void;
+};
+const RovingTabFocusContext = createContext<RovingTabFocusContext | null>(null);
+
+function useRovingTabFocusContext() {
+  const context = useContext(RovingTabFocusContext);
+  if (!context) {
+    throw new Error(
+      "RovingTabFocus components must be used inside a RovingTabFocusProvider"
+    );
+  }
+  return context;
+}
 
 export type LayoutGridProps<T> = {
   items: CollectionItem<T>[];
@@ -17,6 +42,7 @@ export type LayoutGridProps<T> = {
    */
   rowLength: number;
   children: (item: CollectionItem<T>) => ReactNode;
+  className?: string;
 };
 
 type RovingTabFocusState = {
@@ -152,10 +178,22 @@ function rovingTabFocusReducer(
   }
 }
 
+function getKeyDirection(key: string) {
+  switch (key) {
+    case "ArrowLeft":
+      return "left";
+    case "ArrowRight":
+      return "right";
+    default:
+      return null;
+  }
+}
+
 export function LayoutGrid<T>({
   items,
   rowLength,
   children,
+  className,
 }: LayoutGridProps<T>) {
   // this is the ordered list of ids. We use this to work out which item to navigate to
   const listOfIds = items.map((item) => item.id);
@@ -183,14 +221,51 @@ export function LayoutGrid<T>({
     [state.currentFocusedId, state.isAutoFocusEnabled, state.tabStops]
   );
 
+  function handleKeyDown(event: KeyboardEvent) {
+    const direction = getKeyDirection(event.key);
+    // if the key pressed is not an arrow key, do nothing
+    if (!direction) return;
+
+    dispatch({ type: "navigate", direction, currentIdList: listOfIds });
+  }
+
   return (
     <ul
-      data-rowLength={rowLength}
+      // TODO: maybe replace with a CSS var
+      data-size={rowLength}
       onFocus={() => dispatch({ type: "enableAutoFocus" })}
+      onKeyDown={handleKeyDown}
+      className={className}
     >
-      {items.map((item) => (
-        <li key={item.id}>{children(item)}</li>
-      ))}
+      <RovingTabFocusContext.Provider value={{ state, dispatch }}>
+        {items.map((item) => (
+          <li key={item.id}>{children(item)}</li>
+        ))}
+      </RovingTabFocusContext.Provider>
     </ul>
   );
+}
+
+export function useRovingTabItem({ id }: { id: Id }) {
+  const { state, dispatch } = useRovingTabFocusContext();
+  const ref = useRef<HTMLButtonElement>(null);
+
+  useEffect(
+    function registerTabStop() {
+      dispatch({ type: "registerTabStop", id, ref });
+      return () => {
+        dispatch({ type: "unRegisterTabStop", id });
+      };
+    },
+    [dispatch, id]
+  );
+
+  const isCurrentTabStop = state.currentFocusedId === id;
+
+  const props = {
+    tabIndex: isCurrentTabStop ? 0 : -1,
+    onFocus: () => dispatch({ type: "focus", id }),
+  };
+
+  return { ref, props };
 }
