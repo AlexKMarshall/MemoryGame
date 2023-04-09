@@ -8,7 +8,7 @@ export const RadioGroupLabel = style([
   },
 ]);
 
-// Could be a Switcher?
+// TODO: Could be a Switcher?
 export const RadioGroupControls = style({
   display: "grid",
   gridAutoFlow: "column",
@@ -21,6 +21,7 @@ export const RadioGroupControls = style({
   },
 });
 
+// TODO: add focus and hover styles
 // These styles are mostly a copy of the Button secondary, regular sizer styles
 export const RadioButton = style([
   sprinkles({
@@ -32,6 +33,7 @@ export const RadioButton = style([
   {
     display: "grid",
     placeContent: "center",
+    // TODO: extract color theme
     backgroundColor: "hsl(203deg 28% 79%)",
     color: "hsl(0deg 0% 99%)",
 

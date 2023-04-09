@@ -16,6 +16,7 @@ export const buttonBase = style([
   }),
 ]);
 
+// TODO: add focus and hover states
 export const Button = recipe({
   base: buttonBase,
 
