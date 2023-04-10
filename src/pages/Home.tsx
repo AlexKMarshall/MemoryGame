@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useReducer } from "react";
-import { getNumberSequence, getRandomNumbers, shuffleArray } from "../utils";
+import { getRandomNumbers, shuffleArray } from "../utils";
 import * as styles from "./Home.css";
 import { useInterval } from "../hooks/useInterval";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -217,12 +217,6 @@ function useGame(settings: Settings) {
 
   const faceUpCardCount = getFaceUpCardCount(gameState.cards);
 
-  // useEffect(() => {
-  //   const timeoutId = setTimeout(() => {
-  //     dispatch({ type: "checkMatch" });
-  //   }, 1000);
-  //   return () => clearTimeout(timeoutId);
-  // }, [faceUpCardCount]);
   const matchedCardsCount = gameState.cards.filter(
     (card) => card.state === "matched"
   ).length;
@@ -241,12 +235,13 @@ function useGame(settings: Settings) {
     return () => clearTimeout(timeoutId);
   }, [faceUpCardCount]);
 
+  const isMultiplayer = settings.players > 1;
+  const isSinglePlayer = !isMultiplayer;
+
   useInterval(
     () => dispatch({ type: "incrementTime" }),
-    gameState.state === "inProgress" ? 1000 : null
+    gameState.state === "inProgress" && isSinglePlayer ? 1000 : null
   );
-
-  const isMultiplayer = settings.players > 1;
 
   const currentPlayerIndex = gameState.moves % settings.players;
 
@@ -414,6 +409,11 @@ export function Home() {
                           <div
                             key={score.playerIndex}
                             className={styles.gameScoreItem}
+                            data-inverted={
+                              score.score === sortedScoresByPlayer[0].score
+                                ? "(Winner!)"
+                                : undefined
+                            }
                           >
                             <dt className={styles.gameScoreDt}>
                               Player {score.playerIndex + 1}{" "}

@@ -1,4 +1,5 @@
 import { globalStyle, style, styleVariants } from "@vanilla-extract/css";
+import { recipe } from "@vanilla-extract/recipes";
 
 export const main = style({
   padding: "1.5rem",
@@ -320,6 +321,12 @@ export const gameScoreItem = style({
       borderRadius: 10,
     },
   },
+  selectors: {
+    "&[data-inverted]": {
+      backgroundColor: "hsl(206deg 45% 15%)",
+      color: "hsl(0deg 0% 99%)",
+    },
+  },
 });
 
 export const gameScoreDt = style({
@@ -330,6 +337,11 @@ export const gameScoreDt = style({
       fontSize: "1.125rem",
     },
   },
+  selectors: {
+    "[data-inverted] &": {
+      color: "hsl(0deg 0% 99%)",
+    },
+  },
 });
 
 export const gameScoreDd = style({
@@ -338,6 +350,11 @@ export const gameScoreDd = style({
   "@media": {
     "screen and (min-width: 768px)": {
       fontSize: "2rem",
+    },
+  },
+  selectors: {
+    "[data-inverted] &": {
+      color: "hsl(0deg 0% 99%)",
     },
   },
 });
