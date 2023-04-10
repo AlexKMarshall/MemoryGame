@@ -1,5 +1,6 @@
 import { test, describe, expect } from "vitest";
 import {
+  convertArrayTo2D,
   getNextIndex,
   getNumberSequence,
   getRandomNumbers,
@@ -216,5 +217,14 @@ describe("getNextIndex", () => {
         })
       ).toEqual(3);
     });
+  });
+});
+
+describe("convertArrayTo2D", () => {
+  test("converts array to 2D array", () => {
+    expect(convertArrayTo2D([1, 2, 3, 4, 5, 6], 3)).toEqual([
+      [1, 2, 3],
+      [4, 5, 6],
+    ]);
   });
 });

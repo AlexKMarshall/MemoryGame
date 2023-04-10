@@ -75,16 +75,6 @@ export function getNextIndex({
   const isTopEdge = currentIndex < rowLength;
   const isBottomEdge = currentIndex >= length - rowLength;
 
-  // if (isLeft) {
-  //   const leftOffset = -1;
-  //   return (currentIndex + leftOffset + length) % length;
-  // }
-
-  // if (isRight) {
-  //   const rightOffset = 1;
-  //   return (currentIndex + rightOffset + length) % length;
-  // }
-
   if (isLeft && isLeftEdge) {
     return currentIndex + rowLength - 1;
   }
@@ -101,4 +91,18 @@ export function getNextIndex({
   return (
     currentIndex + (isLeft ? -1 : isRight ? 1 : isUp ? -rowLength : rowLength)
   );
+}
+
+/**
+ * Converts an array into a 2D array
+ * @param array  Array to convert
+ * @param rowLength  Number of items in a row
+ * @returns  2D array
+ */
+export function convertArrayTo2D<T>(array: T[], rowLength: number) {
+  const newArray = [];
+  for (let i = 0; i < array.length; i += rowLength) {
+    newArray.push(array.slice(i, i + rowLength));
+  }
+  return newArray;
 }

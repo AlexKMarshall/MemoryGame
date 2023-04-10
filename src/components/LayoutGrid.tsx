@@ -9,6 +9,9 @@ import {
   useRef,
 } from "react";
 import { getNextIndex } from "../utils";
+import { convertArrayTo2D } from "../utils";
+import * as styles from "./LayoutGrid.css";
+import clsx from "clsx";
 
 export type Id = string | number;
 
@@ -240,20 +243,28 @@ export function LayoutGrid<T>({
     });
   }
 
+  const rows = convertArrayTo2D(items, rowLength);
+
   return (
-    <ul
-      // TODO: maybe replace with a CSS var
+    <div
       data-size={rowLength}
       onFocus={() => dispatch({ type: "enableAutoFocus" })}
       onKeyDown={handleKeyDown}
-      className={className}
+      className={clsx(styles.LayoutGrid, className)}
+      role="grid"
     >
       <RovingTabFocusContext.Provider value={{ state, dispatch }}>
-        {items.map((item) => (
-          <li key={item.id}>{children(item)}</li>
+        {rows.map((row, rowIndex) => (
+          <div key={rowIndex} role="row">
+            {row.map((item) => (
+              <div key={item.id} role="gridcell">
+                {children(item)}
+              </div>
+            ))}
+          </div>
         ))}
       </RovingTabFocusContext.Provider>
-    </ul>
+    </div>
   );
 }
 
@@ -273,6 +284,7 @@ export function useRovingTabItem({ id }: { id: Id }) {
 
   const isCurrentTabStop = state.currentFocusedId === id;
 
+  // TODO: use prop getter pattern instead of spreading props
   const props = {
     tabIndex: isCurrentTabStop ? 0 : -1,
     onFocus: () => dispatch({ type: "focus", id }),

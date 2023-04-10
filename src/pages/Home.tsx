@@ -305,18 +305,6 @@ export function Home() {
             </Card>
           )}
         </LayoutGrid>
-        {/* <ul className={styles.cardGrid} data-size={settings.size}>
-          {gameState.cards.map((card, index) => (
-            <li key={index}>
-              <button
-                onClick={() => handleCardSelect(index)}
-                className={styles.cardButton[card.state]}
-              >
-                {card.state === "faceDown" ? null : card.value}
-              </button>
-            </li>
-          ))}
-        </ul> */}
         <div className={styles.metadataSection}>
           <div className={styles.greyBox}>
             <h2 className={styles.metadataHeading}>Time</h2>{" "}
