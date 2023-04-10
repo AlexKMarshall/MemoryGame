@@ -359,11 +359,13 @@ export function Home() {
         <div className={styles.metadataSection}>
           {isMultiplayer ? (
             gameState.scores.map((score, index) => (
-              <div key={index} className={styles.greyBox}>
-                <h2 className={styles.metadataHeading}>
-                  P{index + 1} {currentPlayerIndex === index ? "current" : ""}{" "}
-                </h2>
-                <p className={styles.metadataValue}>{score}</p>
+              <div
+                key={index}
+                className={styles.playerIndicator}
+                aria-current={currentPlayerIndex === index ? "step" : undefined}
+              >
+                <h2 className={styles.playerNumber}>P{index + 1}</h2>
+                <p className={styles.playerScore}>{score}</p>
               </div>
             ))
           ) : (
@@ -398,7 +400,11 @@ export function Home() {
                       )}
                     </Dialog.Title>
                     <p className={styles.dialogSubheading}>
-                      Game over! Here&apos;s how you got on&hellip;
+                      {isMultiplayer ? (
+                        <>Game over! Here are the results&hellip;</>
+                      ) : (
+                        <>Game over! Here&apos;s how you got on&hellip</>
+                      )}
                     </p>
                   </Stack>
                   <Stack gap={{ mobile: 2, tablet: 4 }} as="dl">

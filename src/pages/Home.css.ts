@@ -157,6 +157,61 @@ export const metadataSection = style({
   },
 });
 
+export const playerIndicator = style({
+  padding: "0.75rem",
+  backgroundColor: "hsl(203deg 25% 90%)",
+  borderRadius: 5,
+  display: "flex",
+  flexDirection: "column",
+  textAlign: "center",
+  flexBasis: "16rem",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingInline: "1.5rem",
+      paddingBlock: "1.25rem",
+    },
+  },
+  selectors: {
+    '&[aria-current="step"]': {
+      backgroundColor: "hsl(37deg 98% 54%)",
+      color: "white",
+    },
+  },
+});
+
+export const playerNumber = style({
+  fontSize: "1rem",
+  color: "hsl(203deg 23% 54%)",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      fontSize: "1.125rem",
+    },
+  },
+  selectors: {
+    '[aria-current="step"] &': {
+      color: "white",
+    },
+  },
+});
+
+export const playerScore = style({
+  fontSize: "1.5rem",
+  color: "hsl(205deg 30% 27%)",
+  "@media": {
+    "screen and (min-width: 768px)": {
+      fontSize: "2rem",
+    },
+  },
+  selectors: {
+    '[aria-current="step"] &': {
+      color: "white",
+    },
+  },
+});
+
 export const greyBox = style({
   padding: "0.75rem",
   backgroundColor: "hsl(203deg 25% 90%)",
