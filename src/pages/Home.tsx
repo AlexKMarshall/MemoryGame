@@ -408,18 +408,41 @@ export function Home() {
                     </p>
                   </Stack>
                   <Stack gap={{ mobile: 2, tablet: 4 }} as="dl">
-                    <div className={styles.gameScoreItem}>
-                      <dt className={styles.gameScoreDt}>Time Elapsed</dt>
-                      <dd className={styles.gameScoreDd}>
-                        {formattedDuration}
-                      </dd>
-                    </div>
-                    <div className={styles.gameScoreItem}>
-                      <dt className={styles.gameScoreDt}>Moves Taken</dt>
-                      <dd className={styles.gameScoreDd}>
-                        {gameState.moves} Moves
-                      </dd>
-                    </div>
+                    {isMultiplayer ? (
+                      <>
+                        {sortedScoresByPlayer.map((score) => (
+                          <div
+                            key={score.playerIndex}
+                            className={styles.gameScoreItem}
+                          >
+                            <dt className={styles.gameScoreDt}>
+                              Player {score.playerIndex + 1}{" "}
+                              {score.score === sortedScoresByPlayer[0].score
+                                ? "(Winner!)"
+                                : null}
+                            </dt>
+                            <dd className={styles.gameScoreDd}>
+                              {score.score}
+                            </dd>
+                          </div>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        <div className={styles.gameScoreItem}>
+                          <dt className={styles.gameScoreDt}>Time Elapsed</dt>
+                          <dd className={styles.gameScoreDd}>
+                            {formattedDuration}
+                          </dd>
+                        </div>
+                        <div className={styles.gameScoreItem}>
+                          <dt className={styles.gameScoreDt}>Moves Taken</dt>
+                          <dd className={styles.gameScoreDd}>
+                            {gameState.moves} Moves
+                          </dd>
+                        </div>
+                      </>
+                    )}
                   </Stack>
                   <div className={styles.gameCompleteActions}>
                     <Button
