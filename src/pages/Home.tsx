@@ -30,9 +30,6 @@ type FlipUpAction = {
   type: "flipUp";
   cardIndex: number;
 };
-type CheckMatchAction = {
-  type: "checkMatch";
-};
 type FlipNonMatchesDownAction = {
   type: "flipNonMatchesDown";
 };
@@ -116,29 +113,6 @@ function getGameReducer(settings: Settings) {
 
         return newState;
       }
-      // case "checkMatch": {
-      //   if (getFaceUpCardCount(state.cards) !== numberInMatch) {
-      //     return state;
-      //   }
-      //   const faceUpCards = state.cards.filter(
-      //     (card) => card.state === "faceUp"
-      //   );
-      //   const values = faceUpCards.map((card) => card.value);
-      //   const isMatch = values.every((value) => value === values[0]);
-      //   if (!isMatch) return state;
-      //   const newState = { ...state };
-
-      //   newState.cards = newState.cards.map((card) => ({
-      //     ...card,
-      //     state: card.state === "faceUp" ? "matched" : card.state,
-      //   }));
-
-      //   if (getIsGameComplete(newState.cards)) {
-      //     newState.state = "complete";
-      //   }
-
-      //   return newState;
-      // }
       case "flipNonMatchesDown": {
         if (getFaceUpCardCount(state.cards) !== numberInMatch) {
           return state;
@@ -306,6 +280,20 @@ export function Home() {
 
   const formattedDuration = `${durationMinutes}:${duractionSeconds}`;
 
+  const sortedScoresByPlayer = gameState.scores
+    .map((score, index) => ({
+      score,
+      playerIndex: index,
+    }))
+    .sort((a, b) => b.score - a.score);
+
+  const isGameComplete = gameState.state === "complete";
+  const hasWinner =
+    isMultiplayer &&
+    isGameComplete &&
+    sortedScoresByPlayer[0].score > sortedScoresByPlayer[1]?.score;
+  const isDraw = isMultiplayer && isGameComplete && !hasWinner;
+
   return (
     <main className={styles.main}>
       <div className={styles.layout}>
@@ -399,7 +387,15 @@ export function Home() {
                 <Stack gap={{ mobile: 6, tablet: 10 }}>
                   <Stack gap={{ mobile: 2, tablet: 4 }} align="center">
                     <Dialog.Title className={styles.dialogHeading}>
-                      You did it!
+                      {hasWinner ? (
+                        <>
+                          Player {sortedScoresByPlayer[0].playerIndex + 1} Wins!
+                        </>
+                      ) : isDraw ? (
+                        <>It&apos; a tie!</>
+                      ) : (
+                        <>You did it!</>
+                      )}
                     </Dialog.Title>
                     <p className={styles.dialogSubheading}>
                       Game over! Here&apos;s how you got on&hellip;
