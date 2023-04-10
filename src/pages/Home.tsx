@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useReducer } from "react";
-import { getRandomNumbers, shuffleArray } from "../utils";
+import { getNumberSequence, getRandomNumbers, shuffleArray } from "../utils";
 import * as styles from "./Home.css";
 import { useInterval } from "../hooks/useInterval";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -17,6 +17,7 @@ type GameState = {
    * The time in milliseconds since the game started
    */
   timer: number;
+  scores: number[];
 };
 
 type CardState = {
@@ -41,12 +42,15 @@ type IncrementTimeAction = {
 type RestartGameAction = {
   type: "restartGame";
 };
+type CompleteGameAction = {
+  type: "completeGame";
+};
 
 type GameActions =
   | FlipUpAction
-  | CheckMatchAction
   | FlipNonMatchesDownAction
   | IncrementTimeAction
+  | CompleteGameAction
   | RestartGameAction;
 
 function getGameReducer(settings: Settings) {
@@ -56,6 +60,7 @@ function getGameReducer(settings: Settings) {
   ): GameState {
     switch (action.type) {
       case "flipUp": {
+        console.log("flip up");
         // don't flip up if the the number of allowed face up cards is reached
         if (getFaceUpCardCount(state.cards) === numberInMatch) {
           return state;
@@ -73,34 +78,67 @@ function getGameReducer(settings: Settings) {
           ...card,
           state: "faceUp",
         };
-        if (getFaceUpCardCount(newState.cards) === numberInMatch) {
-          newState.moves++;
+
+        if (getFaceUpCardCount(newState.cards) < numberInMatch) {
+          return newState;
         }
-        return newState;
-      }
-      case "checkMatch": {
-        if (getFaceUpCardCount(state.cards) !== numberInMatch) {
-          return state;
-        }
-        const faceUpCards = state.cards.filter(
-          (card) => card.state === "faceUp"
+
+        const faceUpValues = newState.cards
+          .filter((card) => card.state === "faceUp")
+          .map((card) => card.value);
+
+        const isMatch = faceUpValues.every(
+          (value) => value === faceUpValues[0]
         );
-        const values = faceUpCards.map((card) => card.value);
-        const isMatch = values.every((value) => value === values[0]);
-        if (!isMatch) return state;
-        const newState = { ...state };
 
-        newState.cards = newState.cards.map((card) => ({
-          ...card,
-          state: card.state === "faceUp" ? "matched" : card.state,
-        }));
+        const currentPlayerIndex = state.moves % settings.players;
 
-        if (getIsGameComplete(newState.cards)) {
-          newState.state = "complete";
+        if (isMatch) {
+          // Update score
+          console.log("update score");
+          newState.scores = newState.scores.map((score, index) =>
+            index === currentPlayerIndex ? score + 1 : score
+          );
+          // Set card state to matched
+          newState.cards = newState.cards.map((card) => {
+            if (card.state === "faceUp") {
+              return {
+                ...card,
+                state: "matched",
+              };
+            }
+            return card;
+          });
         }
+
+        // Update moves
+        newState.moves += 1;
 
         return newState;
       }
+      // case "checkMatch": {
+      //   if (getFaceUpCardCount(state.cards) !== numberInMatch) {
+      //     return state;
+      //   }
+      //   const faceUpCards = state.cards.filter(
+      //     (card) => card.state === "faceUp"
+      //   );
+      //   const values = faceUpCards.map((card) => card.value);
+      //   const isMatch = values.every((value) => value === values[0]);
+      //   if (!isMatch) return state;
+      //   const newState = { ...state };
+
+      //   newState.cards = newState.cards.map((card) => ({
+      //     ...card,
+      //     state: card.state === "faceUp" ? "matched" : card.state,
+      //   }));
+
+      //   if (getIsGameComplete(newState.cards)) {
+      //     newState.state = "complete";
+      //   }
+
+      //   return newState;
+      // }
       case "flipNonMatchesDown": {
         if (getFaceUpCardCount(state.cards) !== numberInMatch) {
           return state;
@@ -135,8 +173,12 @@ function getGameReducer(settings: Settings) {
       case "restartGame": {
         return getInitialGameState(settings);
       }
-      default:
-        return state;
+      case "completeGame": {
+        return {
+          ...state,
+          state: "complete",
+        };
+      }
     }
   };
 }
@@ -167,16 +209,19 @@ function getIsGameComplete(cards: CardState[]) {
 
 const settingsSchema = z.object({
   size: z.preprocess(Number, z.union([z.literal(4), z.literal(6)])),
+  players: z.preprocess(Number, z.number().int().min(1).max(4)),
 });
 
 type Settings = z.infer<typeof settingsSchema>;
 
 const defaultSettings = {
   size: 4,
+  players: 1,
 } satisfies Settings;
 
 function getInitialGameState(settings: Settings) {
   const numbers = getGameNumbers(settings.size);
+  const scores = Array.from({ length: settings.players }, () => 0);
   return {
     cards: numbers.map((number, index) => ({
       id: index,
@@ -186,6 +231,7 @@ function getInitialGameState(settings: Settings) {
     moves: 0,
     state: "idle",
     timer: 0,
+    scores,
   } satisfies GameState;
 }
 
@@ -197,24 +243,40 @@ function useGame(settings: Settings) {
 
   const faceUpCardCount = getFaceUpCardCount(gameState.cards);
 
+  // useEffect(() => {
+  //   const timeoutId = setTimeout(() => {
+  //     dispatch({ type: "checkMatch" });
+  //   }, 1000);
+  //   return () => clearTimeout(timeoutId);
+  // }, [faceUpCardCount]);
+  const matchedCardsCount = gameState.cards.filter(
+    (card) => card.state === "matched"
+  ).length;
+  const totalCardsCount = gameState.cards.length;
+
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      dispatch({ type: "checkMatch" });
-    }, 1000);
-    return () => clearTimeout(timeoutId);
-  }, [faceUpCardCount]);
+    if (matchedCardsCount === totalCardsCount) {
+      dispatch({ type: "completeGame" });
+    }
+  }, [matchedCardsCount, totalCardsCount]);
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       dispatch({ type: "flipNonMatchesDown" });
     }, 1000);
     return () => clearTimeout(timeoutId);
   }, [faceUpCardCount]);
+
   useInterval(
     () => dispatch({ type: "incrementTime" }),
     gameState.state === "inProgress" ? 1000 : null
   );
 
-  return [gameState, dispatch] as const;
+  const isMultiplayer = settings.players > 1;
+
+  const currentPlayerIndex = gameState.moves % settings.players;
+
+  return { gameState, dispatch, isMultiplayer, currentPlayerIndex };
 }
 
 export function Home() {
@@ -226,10 +288,11 @@ export function Home() {
 
   const settings = parsedQuery.success ? parsedQuery.data : defaultSettings;
 
-  const [gameState, dispatch] = useGame(settings);
+  const { gameState, dispatch, isMultiplayer, currentPlayerIndex } =
+    useGame(settings);
 
   const handleCardSelect = (index: number) => {
-    dispatch({ type: "checkMatch" });
+    // dispatch({ type: "checkMatch" });
     dispatch({ type: "flipNonMatchesDown" });
     dispatch({ type: "flipUp", cardIndex: index });
   };
@@ -306,14 +369,27 @@ export function Home() {
           )}
         </LayoutGrid>
         <div className={styles.metadataSection}>
-          <div className={styles.greyBox}>
-            <h2 className={styles.metadataHeading}>Time</h2>{" "}
-            <p className={styles.metadataValue}> {formattedDuration}</p>
-          </div>
-          <div className={styles.greyBox}>
-            <h2 className={styles.metadataHeading}>Moves</h2>{" "}
-            <p className={styles.metadataValue}>{gameState.moves}</p>
-          </div>
+          {isMultiplayer ? (
+            gameState.scores.map((score, index) => (
+              <div key={index} className={styles.greyBox}>
+                <h2 className={styles.metadataHeading}>
+                  P{index + 1} {currentPlayerIndex === index ? "current" : ""}{" "}
+                </h2>
+                <p className={styles.metadataValue}>{score}</p>
+              </div>
+            ))
+          ) : (
+            <>
+              <div className={styles.greyBox}>
+                <h2 className={styles.metadataHeading}>Time</h2>
+                <p className={styles.metadataValue}> {formattedDuration}</p>
+              </div>
+              <div className={styles.greyBox}>
+                <h2 className={styles.metadataHeading}>Moves</h2>
+                <p className={styles.metadataValue}>{gameState.moves}</p>
+              </div>
+            </>
+          )}
         </div>
         <Dialog.Root open={gameState.state === "complete"}>
           <Dialog.Portal>

@@ -10,6 +10,17 @@ export function Settings() {
       <h1 className={styles.heading}>memory</h1>
       <Form action="/" className={styles.form}>
         <Stack gap={8}>
+          <RadioGroup name="players">
+            <RadioGroup.Label>Numbers of Players</RadioGroup.Label>
+            <RadioGroup.Controls>
+              <RadioGroup.Option value="1" defaultChecked>
+                1
+              </RadioGroup.Option>
+              <RadioGroup.Option value="2">2</RadioGroup.Option>
+              <RadioGroup.Option value="3">3</RadioGroup.Option>
+              <RadioGroup.Option value="4">4</RadioGroup.Option>
+            </RadioGroup.Controls>
+          </RadioGroup>
           <RadioGroup name="size">
             <RadioGroup.Label>Grid Size</RadioGroup.Label>
             <RadioGroup.Controls>
