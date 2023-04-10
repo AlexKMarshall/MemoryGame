@@ -2,12 +2,12 @@ import { ReactNode, useEffect, useReducer } from "react";
 import { getRandomNumbers, shuffleArray } from "../utils";
 import * as styles from "./Home.css";
 import { useInterval } from "../hooks/useInterval";
-import * as Dialog from "@radix-ui/react-dialog";
 import { useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { Stack } from "../components/Stack";
 import { Button, ButtonLink } from "../components/Button";
 import { LayoutGrid, useRovingTabItem } from "../components/LayoutGrid";
+import { Dialog } from "../components/Dialog";
 
 type GameState = {
   state: "idle" | "inProgress" | "complete";
@@ -308,32 +308,27 @@ export function Home() {
             </div>
           </div>
           <div className={styles.hideTablet}>
-            <Dialog.Root>
+            <Dialog>
               <Dialog.Trigger asChild>
                 <Button color="primary">Menu</Button>
               </Dialog.Trigger>
-              <Dialog.Portal>
-                <Dialog.Overlay className={styles.dialogOverlay} />
-                <div className={styles.dialogPositioner}>
-                  <Dialog.Content className={styles.dialogContent}>
-                    <Stack gap={4}>
-                      <Dialog.Close
-                        asChild
-                        onClick={() => dispatch({ type: "restartGame" })}
-                      >
-                        <Button color="primary">Restart</Button>
-                      </Dialog.Close>
-                      <ButtonLink to="/settings" color="secondary">
-                        New Game
-                      </ButtonLink>
-                      <Dialog.Close asChild>
-                        <Button color="secondary">Resume Game</Button>
-                      </Dialog.Close>
-                    </Stack>
-                  </Dialog.Content>
-                </div>
-              </Dialog.Portal>
-            </Dialog.Root>
+              <Dialog.Content>
+                <Stack gap={4}>
+                  <Dialog.Close
+                    asChild
+                    onClick={() => dispatch({ type: "restartGame" })}
+                  >
+                    <Button color="primary">Restart</Button>
+                  </Dialog.Close>
+                  <ButtonLink to="/settings" color="secondary">
+                    New Game
+                  </ButtonLink>
+                  <Dialog.Close asChild>
+                    <Button color="secondary">Resume Game</Button>
+                  </Dialog.Close>
+                </Stack>
+              </Dialog.Content>
+            </Dialog>
           </div>
         </div>
         <LayoutGrid
@@ -376,90 +371,81 @@ export function Home() {
             </>
           )}
         </div>
-        <Dialog.Root open={gameState.state === "complete"}>
-          <Dialog.Portal>
-            <Dialog.Overlay className={styles.dialogOverlay} />
-            <div className={styles.dialogPositioner}>
-              <Dialog.Content className={styles.dialogContent}>
-                <Stack gap={{ mobile: 6, tablet: 10 }}>
-                  <Stack gap={{ mobile: 2, tablet: 4 }} align="center">
-                    <Dialog.Title className={styles.dialogHeading}>
-                      {hasWinner ? (
-                        <>
-                          Player {sortedScoresByPlayer[0].playerIndex + 1} Wins!
-                        </>
-                      ) : isDraw ? (
-                        <>It&apos; a tie!</>
-                      ) : (
-                        <>You did it!</>
-                      )}
-                    </Dialog.Title>
-                    <p className={styles.dialogSubheading}>
-                      {isMultiplayer ? (
-                        <>Game over! Here are the results&hellip;</>
-                      ) : (
-                        <>Game over! Here&apos;s how you got on&hellip</>
-                      )}
-                    </p>
-                  </Stack>
-                  <Stack gap={{ mobile: 2, tablet: 4 }} as="dl">
-                    {isMultiplayer ? (
-                      <>
-                        {sortedScoresByPlayer.map((score) => (
-                          <div
-                            key={score.playerIndex}
-                            className={styles.gameScoreItem}
-                            data-inverted={
-                              score.score === sortedScoresByPlayer[0].score
-                                ? "(Winner!)"
-                                : undefined
-                            }
-                          >
-                            <dt className={styles.gameScoreDt}>
-                              Player {score.playerIndex + 1}{" "}
-                              {score.score === sortedScoresByPlayer[0].score
-                                ? "(Winner!)"
-                                : null}
-                            </dt>
-                            <dd className={styles.gameScoreDd}>
-                              {score.score}
-                            </dd>
-                          </div>
-                        ))}
-                      </>
-                    ) : (
-                      <>
-                        <div className={styles.gameScoreItem}>
-                          <dt className={styles.gameScoreDt}>Time Elapsed</dt>
-                          <dd className={styles.gameScoreDd}>
-                            {formattedDuration}
-                          </dd>
-                        </div>
-                        <div className={styles.gameScoreItem}>
-                          <dt className={styles.gameScoreDt}>Moves Taken</dt>
-                          <dd className={styles.gameScoreDd}>
-                            {gameState.moves} Moves
-                          </dd>
-                        </div>
-                      </>
-                    )}
-                  </Stack>
-                  <div className={styles.gameCompleteActions}>
-                    <Button
-                      color="primary"
-                      onClick={() => dispatch({ type: "restartGame" })}
-                    >
-                      Restart
-                    </Button>
-                    <ButtonLink to="/settings" color="secondary">
-                      Setup New Game
-                    </ButtonLink>
-                  </div>
-                </Stack>
-              </Dialog.Content>
-            </div>
-          </Dialog.Portal>
-        </Dialog.Root>
+        <Dialog open={gameState.state === "complete"}>
+          <Dialog.Content>
+            <Stack gap={{ mobile: 6, tablet: 10 }}>
+              <Stack gap={{ mobile: 2, tablet: 4 }} align="center">
+                <Dialog.Title>
+                  {hasWinner ? (
+                    <>Player {sortedScoresByPlayer[0].playerIndex + 1} Wins!</>
+                  ) : isDraw ? (
+                    <>It&apos; a tie!</>
+                  ) : (
+                    <>You did it!</>
+                  )}
+                </Dialog.Title>
+                <Dialog.Subtitle>
+                  {isMultiplayer ? (
+                    <>Game over! Here are the results&hellip;</>
+                  ) : (
+                    <>Game over! Here&apos;s how you got on&hellip</>
+                  )}
+                </Dialog.Subtitle>
+              </Stack>
+              <Stack gap={{ mobile: 2, tablet: 4 }} as="dl">
+                {isMultiplayer ? (
+                  <>
+                    {sortedScoresByPlayer.map((score) => (
+                      <div
+                        key={score.playerIndex}
+                        className={styles.gameScoreItem}
+                        data-inverted={
+                          score.score === sortedScoresByPlayer[0].score
+                            ? "(Winner!)"
+                            : undefined
+                        }
+                      >
+                        <dt className={styles.gameScoreDt}>
+                          Player {score.playerIndex + 1}{" "}
+                          {score.score === sortedScoresByPlayer[0].score
+                            ? "(Winner!)"
+                            : null}
+                        </dt>
+                        <dd className={styles.gameScoreDd}>{score.score}</dd>
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    <div className={styles.gameScoreItem}>
+                      <dt className={styles.gameScoreDt}>Time Elapsed</dt>
+                      <dd className={styles.gameScoreDd}>
+                        {formattedDuration}
+                      </dd>
+                    </div>
+                    <div className={styles.gameScoreItem}>
+                      <dt className={styles.gameScoreDt}>Moves Taken</dt>
+                      <dd className={styles.gameScoreDd}>
+                        {gameState.moves} Moves
+                      </dd>
+                    </div>
+                  </>
+                )}
+              </Stack>
+              <div className={styles.gameCompleteActions}>
+                <Button
+                  color="primary"
+                  onClick={() => dispatch({ type: "restartGame" })}
+                >
+                  Restart
+                </Button>
+                <ButtonLink to="/settings" color="secondary">
+                  Setup New Game
+                </ButtonLink>
+              </div>
+            </Stack>
+          </Dialog.Content>
+        </Dialog>
       </div>
     </main>
   );
